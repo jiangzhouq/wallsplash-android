@@ -54,17 +54,24 @@ android {
 }
 
 dependencies {
+    //Android Asynchronous Networking and Image Loading
     compile 'com.koushikdutta.ion:ion:2.1.6'
-
+    //which lets you extract prominent colors from an image
     compile 'com.android.support:palette-v7:23.1.0'
+    //This library includes support for material design user interface implementations.
     compile 'com.android.support:appcompat-v7:23.1.0'
+    //This library adds support for the CardView widget
     compile 'com.android.support:cardview-v7:23.1.0'
+    //This class provides support for the RecyclerView widget
     compile 'com.android.support:recyclerview-v7:23.1.0'
-
+    //Type-safe HTTP client for Android
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    //An HTTP & SPDY client for Android and Java applications
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
+    //A powerful image downloading and caching library for Android
     compile 'com.squareup.picasso:picasso:2.5.2'
+    //观察者模式
     compile 'io.reactivex:rxandroid:1.0.1'
 
     compile 'com.nispok:snackbar:2.11.0'
