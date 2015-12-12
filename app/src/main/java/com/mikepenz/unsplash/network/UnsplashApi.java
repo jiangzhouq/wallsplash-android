@@ -21,7 +21,7 @@ import retrofit.http.GET;
 import rx.Observable;
 
 public class UnsplashApi {
-    public static final String ENDPOINT = "http://lanora.eu/projects/wallsplash/";
+    public static final String ENDPOINT = "http://t.iyun720.com:12342/";
     private final UnsplashService mWebService;
 
     public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); //2015-01-18 15:48:56
@@ -54,7 +54,7 @@ public class UnsplashApi {
 
 
     public interface UnsplashService {
-        @GET("/pictures")
+        @GET("/?action=19")
         Observable<ImageList> listImages();
     }
 
@@ -75,9 +75,9 @@ public class UnsplashApi {
         if (featured == null) {
             ArrayList<Image> list = new ArrayList<Image>(images);
             for (Iterator<Image> it = list.iterator(); it.hasNext(); ) {
-                if (it.next().getFeatured() != 1) {
-                    it.remove();
-                }
+//                if (it.next().getFeatured() != 1) {
+//                    it.remove();
+//                }
             }
             featured = list;
         }
@@ -87,9 +87,9 @@ public class UnsplashApi {
     public static int countFeatured(ArrayList<Image> images) {
         int count = 0;
         for (Image image : images) {
-            if (image.getFeatured() == 1) {
-                count = count + 1;
-            }
+//            if (image.getFeatured() == 1) {
+//                count = count + 1;
+//            }
         }
         return count;
     }
@@ -97,9 +97,9 @@ public class UnsplashApi {
     public ArrayList<Image> filterCategory(ArrayList<Image> images, int filter) {
         ArrayList<Image> list = new ArrayList<Image>(images);
         for (Iterator<Image> it = list.iterator(); it.hasNext(); ) {
-            if ((it.next().getCategory() & filter) != filter) {
-                it.remove();
-            }
+//            if ((it.next().getCategory() & filter) != filter) {
+//                it.remove();
+//            }
         }
         return list;
     }
@@ -107,9 +107,9 @@ public class UnsplashApi {
     public static int countCategory(ArrayList<Image> images, int filter) {
         int count = 0;
         for (Image image : images) {
-            if ((image.getCategory() & filter) == filter) {
-                count = count + 1;
-            }
+//            if ((image.getCategory() & filter) == filter) {
+//                count = count + 1;
+//            }
         }
         return count;
     }

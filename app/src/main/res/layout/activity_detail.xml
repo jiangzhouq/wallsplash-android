@@ -57,7 +57,19 @@
                         android:maxLines="2"
                         android:textColor="#FFF"
                         />
-
+                    <TextView
+                        android:id="@+id/activity_detail_tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/activity_detail_title"
+                        android:layout_marginLeft="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text=""
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="#FFF"
+                        android:layout_alignBaseline="@id/activity_detail_title"
+                        />
                     <TextView
                         android:id="@+id/activity_detail_subtitle"
                         android:layout_width="wrap_content"

@@ -26,6 +26,9 @@ import com.google.android.apps.muzei.api.RemoteMuzeiArtSource;
 import com.mikepenz.unsplash.models.Image;
 import com.mikepenz.unsplash.network.UnsplashApi;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -83,10 +86,10 @@ public class WallSplashSource extends RemoteMuzeiArtSource {
             }
 
             publishArtwork(new Artwork.Builder()
-                    .imageUri(Uri.parse(image.getHighResImage(mWallpaperWidth, mWallpaperHeight)))
-                    .title(image.getAuthor())
-                    .byline(image.getReadableModified_Date())
-                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(image.getUrl())))
+                    .imageUri(Uri.parse(image.getThumbnail()))
+                    .title(image.getUsername())
+                    .byline(DateFormat.getDateInstance().format(new Date(image.getCreate_time())))
+                    .viewIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(image.getThumbnail())))
                     .build());
         } catch (Exception ex) {
             Log.e("wallsplash", "WallSplashSource: " + ex.toString());

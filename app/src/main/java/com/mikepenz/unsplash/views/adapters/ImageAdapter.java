@@ -22,7 +22,9 @@ import com.mikepenz.unsplash.other.Utils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
 
@@ -76,8 +78,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
     public void onBindViewHolder(final ImagesViewHolder imagesViewHolder, final int position) {
 
         final Image currentImage = mImages.get(position);
-        imagesViewHolder.imageAuthor.setText(currentImage.getAuthor());
-        imagesViewHolder.imageDate.setText(currentImage.getReadableModified_Date());
+        imagesViewHolder.imageAuthor.setText(currentImage.getUsername());
+
+        imagesViewHolder.imageDate.setText(DateFormat.getDateInstance().format(new Date(currentImage.getCreate_time())));
         //imagesViewHolder.imageView.setDrawingCacheEnabled(true);
         imagesViewHolder.imageView.setImageBitmap(null);
 
@@ -89,7 +92,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         //cancel any loading images on this view
         Picasso.with(mContext).cancelRequest(imagesViewHolder.imageView);
         //load the image
-        Picasso.with(mContext).load(mImages.get(position).getImageSrc(mScreenWidth)).transform(PaletteTransformation.instance()).into(imagesViewHolder.imageView, new Callback.EmptyCallback() {
+        Picasso.with(mContext).load(mImages.get(position).getThumbnail()).transform(PaletteTransformation.instance()).into(imagesViewHolder.imageView, new Callback.EmptyCallback() {
             @Override
             public void onSuccess() {
                 Bitmap bitmap = ((BitmapDrawable) imagesViewHolder.imageView.getDrawable()).getBitmap(); // Ew!
@@ -141,7 +144,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         DisplayMetrics displaymetrics = mContext.getResources().getDisplayMetrics();
         //image.width .... image.height
         //device.width ... device
-        int finalHeight = (int) (displaymetrics.widthPixels / currentImage.getRatio());
+        int finalHeight = (int) (displaymetrics.widthPixels / 3);
         imagesViewHolder.imageView.setMinimumHeight(finalHeight);
     }
 

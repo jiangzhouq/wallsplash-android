@@ -53,6 +53,8 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 
 import java.io.File;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.util.Date;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -230,7 +232,7 @@ public class DetailActivity extends AppCompatActivity {
             if (future == null) {
                 //prepare the call
                 future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getHighResImage(mWallpaperWidth, mWallpaperHeight))
+                        .load(mSelectedImage.getThumbnail())
                         .progressHandler(progressCallback)
                         .asInputStream();
 
@@ -266,7 +268,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 //prepare the call
                 future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getUrl())
+                        .load(mSelectedImage.getThumbnail())
                         .progressHandler(progressCallback)
                         .asInputStream();
 
@@ -307,7 +309,7 @@ public class DetailActivity extends AppCompatActivity {
                     public void onSelectDirectory(@NonNull final String path) {
                         //prepare the call
                         future = Ion.with(DetailActivity.this)
-                                .load(mSelectedImage.getUrl())
+                                .load(mSelectedImage.getThumbnail())
                                 .progressHandler(progressCallback)
                                 .asInputStream();
 
@@ -350,7 +352,7 @@ public class DetailActivity extends AppCompatActivity {
             if (future == null) {
                 //prepare the call
                 future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getHighResImage(mWallpaperWidth, mWallpaperHeight))
+                        .load(mSelectedImage.getThumbnail())
                         .progressHandler(progressCallback)
                         .asInputStream();
 
@@ -381,7 +383,7 @@ public class DetailActivity extends AppCompatActivity {
             if (future == null) {
                 //prepare the call
                 future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getHighResImage(mWallpaperWidth, mWallpaperHeight))
+                        .load(mSelectedImage.getThumbnail())
                         .progressHandler(progressCallback)
                         .asInputStream();
 
@@ -464,7 +466,7 @@ public class DetailActivity extends AppCompatActivity {
                     if (e == null && result != null && result.getResult() != null) {
                         try {
                             //prepare the file name
-                            String url = mSelectedImage.getUrl();
+                            String url = mSelectedImage.getThumbnail();
                             String fileName = url.substring(url.lastIndexOf('/') + 1, url.length()) + ".jpg";
 
                             File dir;
@@ -758,11 +760,16 @@ public class DetailActivity extends AppCompatActivity {
 
         TextView titleTV = (TextView) mTitleContainer.findViewById(R.id.activity_detail_title);
         titleTV.setTextColor(titleTextColor);
-        titleTV.setText(mSelectedImage.getAuthor());
+        titleTV.setText(mSelectedImage.getTitle());
+
+        TextView tagTV = (TextView) mTitleContainer.findViewById(R.id.activity_detail_tag);
+        tagTV.setTextColor(titleTextColor);
+        if(mSelectedImage.getTag() != null && !mSelectedImage.getTag().isEmpty())
+            tagTV.setText("/" + mSelectedImage.getTag());
 
         TextView subtitleTV = (TextView) mTitleContainer.findViewById(R.id.activity_detail_subtitle);
         subtitleTV.setTextColor(titleTextColor);
-        subtitleTV.setText(mSelectedImage.getReadableModified_Date());
+        subtitleTV.setText(mSelectedImage.getSummary().replace("&lt;", "").replace("/p&gt;","").replace("p&gt;",""));
 
         ((TextView) mTitleContainer.findViewById(R.id.activity_detail_subtitle))
                 .setTextColor(titleTextColor);
