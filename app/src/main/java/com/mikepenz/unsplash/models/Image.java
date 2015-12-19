@@ -146,7 +146,12 @@ public class Image implements Serializable {
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
-
+    public String getStandard_resolution() {
+        return standard_resolution;
+    }
+    public void setStandard_resolution(String standard_resolution) {
+        this.standard_resolution = standard_resolution;
+    }
     public Palette.Swatch getSwatch() {
         return swatch;
     }

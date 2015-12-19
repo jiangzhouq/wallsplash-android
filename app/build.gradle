@@ -13,32 +13,34 @@ android {
         applicationId "com.mikepenz.unsplash"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 190
-        versionName "1.9.0"
+        versionCode 1
+        versionName "0.2.0"
     }
     buildTypes {
-        debug {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
-            try {
-                signingConfig signingConfigs.debug
-            } catch (ex) {
-            }
-            minifyEnabled false
-        }
+//        debug {
+//            applicationIdSuffix = ".debug"
+//            versionNameSuffix = "-DEBUG"
+//            try {
+//                signingConfig signingConfigs.debug
+//            } catch (ex) {
+//            }
+//            minifyEnabled false
+//        }
         release {
-            try {
-                signingConfig signingConfigs.release
-            } catch (ex) {
-            }
-            zipAlignEnabled true
-            minifyEnabled true
-
-            proguardFile 'proguard-gson.pro'
-            proguardFile 'proguard-square-picasso.pro'
-            proguardFile 'proguard-square-retrofit.pro'
-            proguardFile 'proguard-project.pro'
-            proguardFile getDefaultProguardFile('proguard-android.txt')
+//            try {
+//                signingConfig signingConfigs.release
+//            } catch (ex) {
+//            }
+//            zipAlignEnabled true
+//            minifyEnabled true
+//
+//            proguardFile 'proguard-gson.pro'
+//            proguardFile 'proguard-square-picasso.pro'
+//            proguardFile 'proguard-square-retrofit.pro'
+//            proguardFile 'proguard-project.pro'
+//            proguardFile getDefaultProguardFile('proguard-android.txt')
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         applicationVariants.all { variant ->
@@ -54,6 +56,7 @@ android {
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
     //Android Asynchronous Networking and Image Loading
     compile 'com.koushikdutta.ion:ion:2.1.6'
     //which lets you extract prominent colors from an image

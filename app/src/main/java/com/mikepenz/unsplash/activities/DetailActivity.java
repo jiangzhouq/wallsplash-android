@@ -38,6 +38,7 @@ import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
 import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.future.ResponseFuture;
+import com.mikepenz.cardboard.MyCardboardActivity;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.unsplash.R;
@@ -211,135 +212,145 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         final SharedPreferences sp = getSharedPreferences("wall-splash", Context.MODE_PRIVATE);
-        if (!sp.getBoolean("help-understand", false)) {
-            Snackbar.with(getApplicationContext())
-                    .text(R.string.help_try_long_click)
-                    .actionLabel(R.string.help_try_long_click_ok)
-                    .actionColorResource(R.color.accent)
-                    .actionListener(new ActionClickListener() {
-                        @Override
-                        public void onActionClicked(Snackbar snackbar) {
-                            sp.edit().putBoolean("help-understand", true).apply();
-                        }
-                    })
-                    .show(this);
-        }
+//        if (!sp.getBoolean("help-understand", false)) {
+//            Snackbar.with(getApplicationContext())
+//                    .text(R.string.help_try_long_click)
+//                    .actionLabel(R.string.help_try_long_click_ok)
+//                    .actionColorResource(R.color.accent)
+//                    .actionListener(new ActionClickListener() {
+//                        @Override
+//                        public void onActionClicked(Snackbar snackbar) {
+//                            sp.edit().putBoolean("help-understand", true).apply();
+//                        }
+//                    })
+//                    .show(this);
+//        }
     }
 
     private View.OnClickListener onFabShareButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (future == null) {
-                //prepare the call
-                future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getThumbnail())
-                        .progressHandler(progressCallback)
-                        .asInputStream();
-
-                animateStart();
-
-                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        downloadAndSetOrShareImage(false);
-                        super.onAnimationEnd(animation);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        downloadAndSetOrShareImage(false);
-                        super.onAnimationCancel(animation);
-                    }
-                }).start();
-            } else {
-                animateReset(false);
-            }
+            Snackbar.with(getApplicationContext())
+                    .text(R.string.not_opened)
+                    .actionLabel(R.string.help_try_long_click_ok)
+                    .actionColorResource(R.color.accent)
+                    .show(DetailActivity.this);
+//            if (future == null) {
+//                //prepare the call
+//                future = Ion.with(DetailActivity.this)
+//                        .load(mSelectedImage.getThumbnail())
+//                        .progressHandler(progressCallback)
+//                        .asInputStream();
+//
+//                animateStart();
+//
+//                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        downloadAndSetOrShareImage(false);
+//                        super.onAnimationEnd(animation);
+//                    }
+//
+//                    @Override
+//                    public void onAnimationCancel(Animator animation) {
+//                        downloadAndSetOrShareImage(false);
+//                        super.onAnimationCancel(animation);
+//                    }
+//                }).start();
+//            } else {
+//                animateReset(false);
+//            }
         }
     };
 
     private View.OnClickListener onFabDownloadButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (future == null) {
-                if (!Utils.isExternalStorageWritable()) {
-                    Toast.makeText(DetailActivity.this, R.string.error_no_storage, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //prepare the call
-                future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getThumbnail())
-                        .progressHandler(progressCallback)
-                        .asInputStream();
-
-                animateStart();
-
-                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        downloadImage(null);
-                        super.onAnimationEnd(animation);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        downloadImage(null);
-                        super.onAnimationCancel(animation);
-                    }
-                }).start();
-            } else {
-                animateReset(false);
-            }
+            Snackbar.with(getApplicationContext())
+                    .text(R.string.not_opened)
+                    .actionLabel(R.string.help_try_long_click_ok)
+                    .actionColorResource(R.color.accent)
+                    .show(DetailActivity.this);
+//            if (future == null) {
+//                if (!Utils.isExternalStorageWritable()) {
+//                    Toast.makeText(DetailActivity.this, R.string.error_no_storage, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                //prepare the call
+//                future = Ion.with(DetailActivity.this)
+//                        .load(mSelectedImage.getThumbnail())
+//                        .progressHandler(progressCallback)
+//                        .asInputStream();
+//
+//                animateStart();
+//
+//                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        downloadImage(null);
+//                        super.onAnimationEnd(animation);
+//                    }
+//
+//                    @Override
+//                    public void onAnimationCancel(Animator animation) {
+//                        downloadImage(null);
+//                        super.onAnimationCancel(animation);
+//                    }
+//                }).start();
+//            } else {
+//                animateReset(false);
+//            }
         }
     };
 
     private View.OnLongClickListener onFabDownloadButtonLongListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            if (future == null) {
-                if (!Utils.isExternalStorageWritable()) {
-                    Toast.makeText(DetailActivity.this, R.string.error_no_storage, Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-
-
-                final DirectoryChooserFragment df = DirectoryChooserFragment.newInstance("wall-splash", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
-                df.setDirectoryChooserListener(new DirectoryChooserFragment.OnFragmentInteractionListener() {
-                    @Override
-                    public void onSelectDirectory(@NonNull final String path) {
-                        //prepare the call
-                        future = Ion.with(DetailActivity.this)
-                                .load(mSelectedImage.getThumbnail())
-                                .progressHandler(progressCallback)
-                                .asInputStream();
-
-                        animateStart();
-
-                        mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                downloadImage(path);
-                                super.onAnimationEnd(animation);
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-                                downloadImage(path);
-                                super.onAnimationCancel(animation);
-                            }
-                        }).start();
-                        df.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelChooser() {
-                        df.dismiss();
-                    }
-                });
-                df.show(getSupportFragmentManager(), "MyDF");
-            } else {
-                animateReset(false);
-            }
+//            if (future == null) {
+//                if (!Utils.isExternalStorageWritable()) {
+//                    Toast.makeText(DetailActivity.this, R.string.error_no_storage, Toast.LENGTH_SHORT).show();
+//                    return false;
+//                }
+//
+//
+//                final DirectoryChooserFragment df = DirectoryChooserFragment.newInstance("wall-splash", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath());
+//                df.setDirectoryChooserListener(new DirectoryChooserFragment.OnFragmentInteractionListener() {
+//                    @Override
+//                    public void onSelectDirectory(@NonNull final String path) {
+//                        //prepare the call
+//                        future = Ion.with(DetailActivity.this)
+//                                .load(mSelectedImage.getThumbnail())
+//                                .progressHandler(progressCallback)
+//                                .asInputStream();
+//
+//                        animateStart();
+//
+//                        mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                downloadImage(path);
+//                                super.onAnimationEnd(animation);
+//                            }
+//
+//                            @Override
+//                            public void onAnimationCancel(Animator animation) {
+//                                downloadImage(path);
+//                                super.onAnimationCancel(animation);
+//                            }
+//                        }).start();
+//                        df.dismiss();
+//                    }
+//
+//                    @Override
+//                    public void onCancelChooser() {
+//                        df.dismiss();
+//                    }
+//                });
+//                df.show(getSupportFragmentManager(), "MyDF");
+//            } else {
+//                animateReset(false);
+//            }
 
             return false;
         }
@@ -352,7 +363,7 @@ public class DetailActivity extends AppCompatActivity {
             if (future == null) {
                 //prepare the call
                 future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getThumbnail())
+                        .load(mSelectedImage.getStandard_resolution())
                         .progressHandler(progressCallback)
                         .asInputStream();
 
@@ -361,13 +372,12 @@ public class DetailActivity extends AppCompatActivity {
                 mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        streamAndSetImage();
+                        downloadAndSetOrShareImage(true);
                         super.onAnimationEnd(animation);
                     }
 
                     @Override
                     public void onAnimationCancel(Animator animation) {
-                        streamAndSetImage();
                         super.onAnimationCancel(animation);
                     }
                 }).start();
@@ -380,32 +390,33 @@ public class DetailActivity extends AppCompatActivity {
     private View.OnLongClickListener onFabButtonLongListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
-            if (future == null) {
-                //prepare the call
-                future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getThumbnail())
-                        .progressHandler(progressCallback)
-                        .asInputStream();
-
-                animateStart();
-
-                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        downloadAndSetOrShareImage(true);
-                        super.onAnimationEnd(animation);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        downloadAndSetOrShareImage(true);
-                        super.onAnimationCancel(animation);
-                    }
-                }).start();
-
-            } else {
-                animateReset(false);
-            }
+//            if (future == null) {
+//                //prepare the call
+//                future = Ion.with(DetailActivity.this)
+//                        .load(mSelectedImage.getStandard_resolution())
+//                        .progressHandler(progressCallback)
+//                        .asInputStream();
+//
+//                animateStart();
+//
+//                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//
+//                        downloadAndSetOrShareImage(true);
+//                        super.onAnimationEnd(animation);
+//                    }
+//
+//                    @Override
+//                    public void onAnimationCancel(Animator animation) {
+//                        downloadAndSetOrShareImage(true);
+//                        super.onAnimationCancel(animation);
+//                    }
+//                }).start();
+//
+//            } else {
+//                animateReset(false);
+//            }
 
             return true;
         }
@@ -535,10 +546,11 @@ public class DetailActivity extends AppCompatActivity {
                             Uri contentUri = FileProvider.getUriForFile(DetailActivity.this, "com.mikepenz.fileprovider", file);
 
                             if (set) {
-                                //get crop intent
-                                Intent intent = WallpaperManager.getInstance(DetailActivity.this).getCropAndSetWallpaperIntent(contentUri);
-                                //start activity for result so we can animate if we finish
-                                DetailActivity.this.startActivityForResult(intent, ACTIVITY_CROP);
+                                Intent intent = new Intent("com.mikepenz.cardboard.MyCardboardActivity");
+                                intent.putExtra("url", file.getAbsolutePath());
+                                Log.d("qiqi", "file.getPath():" + file.getAbsolutePath());
+                                startActivity(intent);
+                                DetailActivity.this.finish();
                             } else {
                                 //share :D
                                 Intent shareIntent = new Intent(Intent.ACTION_SEND);

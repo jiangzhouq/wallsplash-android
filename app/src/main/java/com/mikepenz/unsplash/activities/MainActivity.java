@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         final Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
@@ -75,22 +74,22 @@ public class MainActivity extends AppCompatActivity {
                         new PrimaryDrawerItem().withName(R.string.category_people).withIdentifier(Category.PEOPLE.id).withIcon(GoogleMaterial.Icon.gmd_person),
                         new PrimaryDrawerItem().withName(R.string.category_technology).withIdentifier(Category.TECHNOLOGY.id).withIcon(GoogleMaterial.Icon.gmd_local_see)
                 )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem != null) {
-                            if (drawerItem instanceof Nameable) {
-                                toolbar.setTitle(((Nameable) drawerItem).getName().getText(MainActivity.this));
-                            }
-                            if (onFilterChangedListener != null) {
-                                onFilterChangedListener.onFilterChanged(drawerItem.getIdentifier());
-                            }
-                        }
-
-                        return false;
-                    }
-                })
+//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//
+//                    @Override
+//                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                        if (drawerItem != null) {
+//                            if (drawerItem instanceof Nameable) {
+//                                toolbar.setTitle(((Nameable) drawerItem).getName().getText(MainActivity.this));
+//                            }
+//                            if (onFilterChangedListener != null) {
+//                                onFilterChangedListener.onFilterChanged(drawerItem.getIdentifier());
+//                            }
+//                        }
+//
+//                        return false;
+//                    }
+//                })
                 .build();
 
         //disable scrollbar :D it's ugly
@@ -118,8 +117,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        menu.findItem(R.id.action_open_source).setIcon(new IconicsDrawable(this, FontAwesome.Icon.faw_github).color(Color.WHITE).actionBar());
+        menu.findItem(R.id.action_open_source).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_settings).color(Color.WHITE).actionBar());
         menu.findItem(R.id.action_shuffle).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_shuffle).paddingDp(1).color(Color.WHITE).actionBar());
 
         return true;

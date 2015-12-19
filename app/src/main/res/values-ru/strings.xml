@@ -67,4 +67,6 @@
     <string name="create_folder_error_already_exists">Folder already exists</string>
     <string name="create_folder_error">Could not create folder</string>
     <string name="up_label">Up</string>
+    <string name="not_opened">暂未开放</string>
+    <string name="about">About</string>
 </resources>

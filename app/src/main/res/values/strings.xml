@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">wall:splash</string>
-    <string name="action_open_source">Open Source</string>
+    <string name="app_name">云游720</string>
+    <string name="action_open_source">About us</string>
     <string name="action_shuffle">Shuffle</string>
 
     <!-- categories -->
@@ -44,22 +44,7 @@
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
     <string name="aboutLibraries_description_text">
-        <![CDATA[
-        <b>wall:splash</b> by <a href="mikepenz.com">Mike Penz</a>
-        is a (unofficial) client for the awesome
-        <a href="https://unsplash.com">unsplash</a>
-        "Free (do whatever you want) high-resolution photos." service by
-        <a href="https://pickcrew.com/">Crew</a>
-        <br/>
-        <br/>
-        The app is based on the awesome
-        <a href="https://github.com/saulmm/OpenLibra-Material">OpenLibra-Material</a>
-        GitHub repo by
-        <a href="https://plus.google.com/u/0/+SaulMolineroMalvido/posts">Saul MM</a>
-        <br/>
-        <br/>
-        Application and API created by <a href="mikepenz.com">Mike Penz</a>
-        ]]>
+        <b>云游720</b> 内部测试版
     </string>
 
     <!-- DialogFragment -->
@@ -73,4 +58,6 @@
     <string name="create_folder_error_already_exists">Folder already exists</string>
     <string name="create_folder_error">Could not create folder</string>
     <string name="up_label">Up</string>
+    <string name="not_opened">暂未开放</string>
+    <string name="about">About</string>
 </resources>
