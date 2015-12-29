@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,7 +38,7 @@ import rx.schedulers.Schedulers;
 import tr.xip.errorview.ErrorView;
 import tr.xip.errorview.RetryListener;
 
-public class ImagesFragment extends Fragment {
+public class UsersFragment extends Fragment {
 
     public static SparseArray<Bitmap> photoCache = new SparseArray<>(1);
 
@@ -56,8 +55,8 @@ public class ImagesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        if (ImagesFragment.this.getActivity() instanceof MainActivity) {
-            ((MainActivity) ImagesFragment.this.getActivity()).setOnFilterChangedListener(new MainActivity.OnFilterChangedListener() {
+        if (UsersFragment.this.getActivity() instanceof MainActivity) {
+            ((MainActivity) UsersFragment.this.getActivity()).setOnFilterChangedListener(new MainActivity.OnFilterChangedListener() {
                 @Override
                 public void onFilterChanged(int filter) {
                     if (mImages != null) {
@@ -138,8 +137,8 @@ public class ImagesFragment extends Fragment {
             mImages = images.getData();
             updateAdapter(mImages);
 
-            if (ImagesFragment.this.getActivity() instanceof MainActivity) {
-                ((MainActivity) ImagesFragment.this.getActivity()).setCategoryCount(images);
+            if (UsersFragment.this.getActivity() instanceof MainActivity) {
+                ((MainActivity) UsersFragment.this.getActivity()).setCategoryCount(images);
             }
         }
 

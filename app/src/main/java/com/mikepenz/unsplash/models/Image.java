@@ -14,8 +14,8 @@ public class Image implements Serializable {
     private static final DateFormat sdf = SimpleDateFormat.getDateInstance();
 
     private String color;
-    private String image_src;
-    private String author;
+    private String low_resolution;
+    private String username;
     private Date date;
     private Date modified_date;
     private float ratio;
@@ -35,11 +35,11 @@ public class Image implements Serializable {
     }
 
     public String getUrl() {
-        return image_src;
+        return low_resolution;
     }
 
     public String getHighResImage(int minWidth, int minHeight) {
-        String url = image_src + "?fm=png";
+        String url = low_resolution + "?fm=png";
 
         //minimize processing costs of unsplash image hosting
         //try to eliminate the white line on top
@@ -63,7 +63,7 @@ public class Image implements Serializable {
     }
 
     public String getImageSrc(int screenWidth) {
-        return image_src + "?q=75&fm=jpg&w=" + Utils.optimalImageWidth(screenWidth);
+        return low_resolution + "?q=75&fm=jpg&w=" + Utils.optimalImageWidth(screenWidth);
 
         /*
         wait with this one for now. i don't want to bring up the generation quota of unsplash
@@ -78,16 +78,12 @@ public class Image implements Serializable {
         */
     }
 
-    public void setImageSrc(String image_src) {
-        this.image_src = image_src;
+    public void setImageSrccc(String image_srccc) {
+        this.low_resolution = image_srccc;
     }
 
     public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
+        return username;
     }
 
     public Date getDate() {
