@@ -60,4 +60,5 @@
     <string name="up_label">Up</string>
     <string name="not_opened">暂未开放</string>
     <string name="about">About</string>
+    <string name="user_detail">%1$s - Works:%2$d - Popularity:%3$d</string>
 </resources>

@@ -34,14 +34,13 @@ import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
+import com.mikepenz.unsplash.R;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import com.mikepenz.unsplash.R;
+
 import javax.microedition.khronos.egl.EGLConfig;
 
 import static com.mikepenz.cardboard.ShaderUtil.createProgram;
@@ -178,7 +177,7 @@ public class MyCardboardActivity extends CardboardActivity implements
 		Log.d("qiqi", "width:" + width + " height:" + height + " density:" + density + " densityDpi:" + densityDpi);
 		setContentView(R.layout.common_ui);
 		Intent intent = getIntent();
-		mImageUri = Uri.parse("file://" + intent.getStringExtra("url"));
+		mImageUri = Uri.parse(intent.getStringExtra("url"));
 		Log.d("qiqi","receive:" + mImageUri.toString());
 
 		CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
@@ -560,9 +559,9 @@ public class MyCardboardActivity extends CardboardActivity implements
 				0 // 偏移量
 		);
 		int textureId = textures[0];
-
+		Log.d("qiqi","mImageUri:" + mImageUri.toString());
 		if(mImageUri.toString().isEmpty()){
-			Log.d("qiqi","mImageUri is empty. mImageUri:" + mImageUri.toString());
+
 			return textureId;
 		}
 
@@ -577,40 +576,39 @@ public class MyCardboardActivity extends CardboardActivity implements
 				GLES30.GL_CLAMP_TO_EDGE);
 
 		// 通过输入流加载图片===============begin===================
-//		InputStream is = this.getResources().openRawResource(drawableId);
-		InputStream is = null;
-		try{
-			Log.d("qiqi", "mImageUri:" + mImageUri);
-			is = this.getContentResolver().openInputStream(mImageUri);
-		}catch (Exception exception){
-			Log.d("qiqi",exception.toString());
-		}
+//		InputStream is = null;
+//		try{
+//			Log.d("qiqi", "mImageUri:" + mImageUri);
+//			is = this.getContentResolver().openInputStream(mImageUri);
+//		}catch (Exception exception){
+//			Log.d("qiqi",exception.toString());
+//		}
 		Bitmap bitmapTmp;
 		try {
-			bitmapTmp = BitmapFactory.decodeStream(is);
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(mImageUri.toString(), options);
+//			bitmapTmp = BitmapFactory.decodeStream(is);
+			Log.d("qiqi", "options.outHeight:" + options.outHeight + " options.outWidth:" + options.outWidth);
 
-
-			double dstHeight = bitmapTmp.getHeight();
+			int dstHeight = 0;
 			for(int i = 0; i < 14 ; i ++){
-				if (bitmapTmp.getHeight() > Math.pow( 2, i) && bitmapTmp.getHeight() < Math.pow( 2, i + 1)){
-					dstHeight = Math.pow( 2, i);
+				if (options.outHeight > Math.pow( 2, i) && options.outHeight < Math.pow( 2, i + 1)){
+					dstHeight = (int)Math.pow( 2, i);
 				}
 			}
-			double dstWidth = bitmapTmp.getWidth();
-			for(int i = 0; i < 14 ; i ++){
-				if (bitmapTmp.getWidth() > Math.pow( 2, i) && bitmapTmp.getWidth() < Math.pow( 2, i + 1)){
-					dstWidth = Math.pow( 2, i);
-				}
-			}
+			double dstWidth = dstHeight/2;
 			Log.d("qiqi","dstWidth:" + dstWidth + " dstHeight:" + dstHeight);
-			bitmapTmp = Bitmap.createScaledBitmap(bitmapTmp, (int)dstWidth, (int)dstHeight , true);
+			options.inSampleSize = 3;
+			options.inJustDecodeBounds = false;
+			bitmapTmp = BitmapFactory.decodeFile(mImageUri.toString(), options);
 
 		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				is.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 		// 通过输入流加载图片===============end=====================
 

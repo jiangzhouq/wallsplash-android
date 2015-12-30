@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.mikepenz.unsplash.CustomApplication;
 import com.mikepenz.unsplash.models.Image;
 import com.mikepenz.unsplash.models.ImageList;
+import com.mikepenz.unsplash.models.UserList;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -18,6 +19,7 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import rx.Observable;
 
 public class UnsplashApi {
@@ -56,6 +58,12 @@ public class UnsplashApi {
     public interface UnsplashService {
         @GET("/?action=19")
         Observable<ImageList> listImages();
+
+        @GET("/?action=20")
+        Observable<UserList> listUsers();
+
+        @GET("/?action=7&uid={uid}")
+        Observable<ImageList> listUserImages(@Path("uid") int uid);
     }
 
     public interface RandomUnsplashService {
@@ -67,6 +75,13 @@ public class UnsplashApi {
         return mWebService.listImages();
     }
 
+    public Observable<UserList> fetchUsers() {
+        return mWebService.listUsers();
+    }
+
+    public Observable<ImageList> fetchUserImages(int uid) {
+        return mWebService.listUserImages(uid);
+    }
 
     //keep the filtered array so we can reuse it later :D
     private ArrayList<Image> featured = null;
