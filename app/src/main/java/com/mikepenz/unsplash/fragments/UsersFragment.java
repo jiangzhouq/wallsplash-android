@@ -2,10 +2,14 @@ package com.mikepenz.unsplash.fragments;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,11 +20,13 @@ import android.widget.ProgressBar;
 
 import com.mikepenz.unsplash.OnItemClickListener;
 import com.mikepenz.unsplash.R;
+import com.mikepenz.unsplash.activities.SingleUserActivity;
 import com.mikepenz.unsplash.models.ImageList;
 import com.mikepenz.unsplash.models.User;
 import com.mikepenz.unsplash.models.UserList;
 import com.mikepenz.unsplash.network.UnsplashApi;
 import com.mikepenz.unsplash.views.adapters.UserAdapter;
+import com.sch.rfview.AnimRFRecyclerView;
 
 import java.util.ArrayList;
 
@@ -40,10 +46,21 @@ public class UsersFragment extends Fragment {
     private UserAdapter mUserAdapter;
     private ArrayList<User> mUsers;
     private ArrayList<User> mCurrentUsers;
-    private RecyclerView mImageRecycler;
+    private AnimRFRecyclerView mImageRecycler;
     private ProgressBar mImagesProgress;
     private ErrorView mImagesErrorView;
 
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case 0:
+                    Log.d("qiqi","update ");
+                    updateAdapter(mUsers);
+                    break;
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -73,8 +90,8 @@ public class UsersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_images, container, false);
-        mImageRecycler = (RecyclerView) rootView.findViewById(R.id.fragment_last_images_recycler);
+        View rootView = inflater.inflate(R.layout.fragment_users, container, false);
+        mImageRecycler = (AnimRFRecyclerView) rootView.findViewById(R.id.fragment_last_images_recycler);
         mImagesProgress = (ProgressBar) rootView.findViewById(R.id.fragment_images_progress);
         mImagesErrorView = (ErrorView) rootView.findViewById(R.id.fragment_images_error_view);
 
@@ -102,9 +119,9 @@ public class UsersFragment extends Fragment {
     }
 
     private void showAll() {
-        if (mUsers != null) {
-            updateAdapter(mUsers);
-        } else {
+//        if (mUsers != null) {
+//            updateAdapter(mUsers);
+//        } else {
             mImagesProgress.setVisibility(View.VISIBLE);
             mImageRecycler.setVisibility(View.GONE);
             mImagesErrorView.setVisibility(View.GONE);
@@ -113,7 +130,7 @@ public class UsersFragment extends Fragment {
             mApi.fetchUsers().cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
-        }
+//        }
     }
 
 //    private void showFeatured() {
@@ -135,33 +152,50 @@ public class UsersFragment extends Fragment {
     class PicObserver implements Observer<ImageList>{
         int position = 0;
         public PicObserver(int position) {
+            Log.d("qiqi", "set position:" + position);
             this.position = position;
         }
 
         @Override
         public void onNext(ImageList imageList) {
-            mUsers.get(position).setImage1(imageList.getData().get(0).getThumbnail());
-            mUsers.get(position).setImage2(imageList.getData().get(1).getThumbnail());
-            updateAdapter(mUsers);
+            Log.d("qiqi", "success position:" + position + " count:" + imageList.getData().size());
+            if(imageList.getData().size() >=1){
+                mUsers.get(position).setImage1(imageList.getData().get(0).getThumbnail());
+            }
+            if(imageList.getData().size() >=2){
+                mUsers.get(position).setImage2(imageList.getData().get(1).getThumbnail());
+            }
+            ArrayList<User> nUsers = mUsers;
+            UserAdapter newAdapter = new UserAdapter(mUsers);
+            newAdapter.setOnItemClickListener(recyclerRowClickListener);
+            mImageRecycler.setAdapter(newAdapter);
         }
 
         @Override
         public void onError(Throwable e) {
-
+            Log.d("qiqi", "error position:" + position + " e:" + e.toString());
         }
 
         @Override
         public void onCompleted() {
-
+            Log.d("qiqi", "completed position:" + position);
         }
     }
     private Observer<UserList> observer = new Observer<UserList>() {
         @Override
         public void onNext(final UserList users) {
             mUsers = users.getData();
+            Log.d("qiqi", "start to get pics");
+            ArrayList<User> nUsers = new ArrayList<User>();
+            for (User user : mUsers){
+                if(user.getWorks() > 0){
+                    nUsers.add(user);
+                }
+            }
+            mUsers = nUsers;
             startToGetPics();
             updateAdapter(mUsers);
-
+//            handler.sendEmptyMessageDelayed(0, 5000);
 //            if (UsersFragment.this.getActivity() instanceof MainActivity) {
 //                ((MainActivity) UsersFragment.this.getActivity()).setCategoryCount(images);
 //            }
@@ -177,6 +211,7 @@ public class UsersFragment extends Fragment {
 
         @Override
         public void onError(final Throwable error) {
+            Log.d("qiqi", "error:" + error.toString());
             if (error instanceof RetrofitError) {
                 RetrofitError e = (RetrofitError) error;
                 if (e.getKind() == RetrofitError.Kind.NETWORK) {
@@ -208,7 +243,10 @@ public class UsersFragment extends Fragment {
 
         @Override
         public void onClick(View v, int position) {
-
+            Log.d("qiqi", "onclicked:" + position);
+            Intent intent = new Intent(getActivity(), SingleUserActivity.class);
+            intent.putExtra("uid", mUsers.get(position - 1).getUid());
+            getActivity().startActivity(intent);
 //            User selectedImage = mCurrentUsers.get(position);
 //
 //            Intent detailIntent = new Intent(getActivity(), DetailActivity.class);

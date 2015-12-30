@@ -67,6 +67,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.0'
     //This class provides support for the RecyclerView widget
     compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.sch.rfview:AnimRefreshRecyclerView:1.0.3@aar'
     //Type-safe HTTP client for Android
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     //An HTTP & SPDY client for Android and Java applications
@@ -94,4 +95,5 @@ dependencies {
     compile 'com.mikepenz:iconics-core:1.7.9@aar'
     compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }

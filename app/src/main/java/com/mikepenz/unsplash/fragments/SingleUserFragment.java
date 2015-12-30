@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -19,18 +18,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mikepenz.unsplash.OnItemClickListener;
 import com.mikepenz.unsplash.R;
 import com.mikepenz.unsplash.activities.DetailActivity;
 import com.mikepenz.unsplash.activities.MainActivity;
+import com.mikepenz.unsplash.activities.SingleUserActivity;
 import com.mikepenz.unsplash.activities.UserActivity;
 import com.mikepenz.unsplash.models.Image;
 import com.mikepenz.unsplash.models.ImageList;
 import com.mikepenz.unsplash.models.User;
 import com.mikepenz.unsplash.models.UserList;
 import com.mikepenz.unsplash.network.UnsplashApi;
-import com.mikepenz.unsplash.other.PaletteTransformation;
 import com.mikepenz.unsplash.views.adapters.ImageAdapter;
 import com.sch.rfview.AnimRFRecyclerView;
 import com.squareup.picasso.Picasso;
@@ -46,7 +46,7 @@ import rx.schedulers.Schedulers;
 import tr.xip.errorview.ErrorView;
 import tr.xip.errorview.RetryListener;
 
-public class ImagesFragment extends Fragment {
+public class SingleUserFragment extends Fragment {
 
     public static SparseArray<Bitmap> photoCache = new SparseArray<>(1);
 
@@ -58,15 +58,15 @@ public class ImagesFragment extends Fragment {
     private AnimRFRecyclerView mImageRecycler;
     private ProgressBar mImagesProgress;
     private ErrorView mImagesErrorView;
-    private CircleImageView mUserProfile1;
-    private CircleImageView mUserProfile2;
-    private CircleImageView mUserProfile3;
+    private ImageView mUserProfile;
+    private TextView mUserDetail;
+    private int curUid;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
-        if (ImagesFragment.this.getActivity() instanceof MainActivity) {
-            ((MainActivity) ImagesFragment.this.getActivity()).setOnFilterChangedListener(new MainActivity.OnFilterChangedListener() {
+        if (SingleUserFragment.this.getActivity() instanceof MainActivity) {
+            ((MainActivity) SingleUserFragment.this.getActivity()).setOnFilterChangedListener(new MainActivity.OnFilterChangedListener() {
                 @Override
                 public void onFilterChanged(int filter) {
                     if (mImages != null) {
@@ -90,24 +90,17 @@ public class ImagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_images, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_user, container, false);
         mImageRecycler = (AnimRFRecyclerView) rootView.findViewById(R.id.fragment_last_images_recycler);
         mImagesProgress = (ProgressBar) rootView.findViewById(R.id.fragment_images_progress);
         mImagesErrorView = (ErrorView) rootView.findViewById(R.id.fragment_images_error_view);
 
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.findusers_head_viewer, null);
-        mUserProfile1 = (CircleImageView) headerView.findViewById(R.id.user_profile_1);
-        mUserProfile2 = (CircleImageView) headerView.findViewById(R.id.user_profile_2);
-        mUserProfile3 = (CircleImageView) headerView.findViewById(R.id.user_profile_3);
+        View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.user_info_head_viewer, null);
+        mUserProfile = (ImageView) headerView.findViewById(R.id.user_profile);
+        mUserDetail = (TextView) headerView.findViewById(R.id.user_detail);
         mImageRecycler.addHeaderView(headerView);
-        headerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).startActivity(new Intent(getActivity(), UserActivity.class));
-            }
-        });
         mImageRecycler.setLayoutManager(gridLayoutManager);
         mImageRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -119,8 +112,9 @@ public class ImagesFragment extends Fragment {
         mImageAdapter = new ImageAdapter();
         mImageAdapter.setOnItemClickListener(recyclerRowClickListener);
         mImageRecycler.setAdapter(mImageAdapter);
-
+        curUid = ((SingleUserActivity)getActivity()).curUid;
         showAll();
+
 
         return rootView;
     }
@@ -137,32 +131,24 @@ public class ImagesFragment extends Fragment {
             mImagesProgress.setVisibility(View.VISIBLE);
             mImageRecycler.setVisibility(View.GONE);
             mImagesErrorView.setVisibility(View.GONE);
-
+            Log.d("qiqi", "singleUser curUid:" + curUid);
             // Load images from API
-            mApi.fetchImages().cache().subscribeOn(Schedulers.newThread())
+            mApi.fetchUserImages(curUid).cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
-            mApi.fetchUsers().cache().subscribeOn(Schedulers.newThread())
+            mApi.fetchUser(curUid).cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topUserobserver);
+                    .subscribe(userObserver);
         }
     }
-    private Observer<UserList> topUserobserver = new Observer<UserList>() {
+    private Observer<UserList> userObserver = new Observer<UserList>() {
         @Override
         public void onNext(final UserList users) {
             ArrayList<User> mUsers = users.getData();
 
-            ArrayList<User> nUsers = new ArrayList<User>();
-            for (User user : mUsers){
-                if(user.getWorks() > 0){
-                    nUsers.add(user);
-                }
-            }
-            mUsers = nUsers;
             Log.d("qiqi", "1:" + "http://www.iyun720.com/data/avatar/000/00/00/" + mUsers.get(0).getUid() + "_avatar_middle.jpg");
-            Picasso.with(getActivity()).load("http://www.iyun720.com/data/avatar/000/00/00/"+ mUsers.get(0).getUid() +"_avatar_middle.jpg" ).into(mUserProfile1);
-            Picasso.with(getActivity()).load("http://www.iyun720.com/data/avatar/000/00/00/"+ mUsers.get(1).getUid() +"_avatar_middle.jpg" ).into(mUserProfile2);
-            Picasso.with(getActivity()).load("http://www.iyun720.com/data/avatar/000/00/00/"+ mUsers.get(2).getUid() +"_avatar_middle.jpg" ).into(mUserProfile3);
+            Picasso.with(getActivity()).load("http://www.iyun720.com/data/avatar/000/00/00/"+ mUsers.get(0).getUid() +"_avatar_middle.jpg" ).into(mUserProfile);
+            mUserDetail.setText(String.format(getActivity().getResources().getString(R.string.user_detail_single),mUsers.get(0).getWorks() , mUsers.get(0).getFollow(), mUsers.get(0).getFollowed()));
         }
 
         @Override
@@ -185,11 +171,12 @@ public class ImagesFragment extends Fragment {
         @Override
         public void onNext(final ImageList images) {
             mImages = images.getData();
+            Log.d("qiqi", "singleUser pic:" + mImages.size());
             updateAdapter(mImages);
 
-            if (ImagesFragment.this.getActivity() instanceof MainActivity) {
-                ((MainActivity) ImagesFragment.this.getActivity()).setCategoryCount(images);
-            }
+//            if (SingleUserFragment.this.getActivity() instanceof MainActivity) {
+//                ((MainActivity) SingleUserFragment.this.getActivity()).setCategoryCount(images);
+//            }
         }
 
         @Override

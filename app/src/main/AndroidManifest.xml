@@ -29,6 +29,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.mikepenz.unsplash.activities.UserActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.mikepenz.unsplash.activities.USERACTIVITY"/>
+                <category android:name="android.intent.category.default"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.mikepenz.unsplash.activities.SingleUserActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.mikepenz.unsplash.activities.SINGLEUSERACTIVITY"/>
+                <category android:name="android.intent.category.default"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.mikepenz.cardboard.MyCardboardActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"

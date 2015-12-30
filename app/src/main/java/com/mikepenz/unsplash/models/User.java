@@ -22,19 +22,19 @@ public class User implements Serializable {
 //    private int featured;
 //    private int category;
 
-    private String username;
-    private int province;
-    private int followed;
-    private String user_profile;
-    private int works;
-    private int uid;
-    private int city;
-    private String summary;
-    private int popular;
-    private int follow;
-    private String sex;
-    private String image1;
-    private String image2;
+    public String username;
+    public int province;
+    public int followed;
+    public String user_profile;
+    public int works;
+    public int uid;
+    public int city;
+    public String summary;
+    public int popular;
+    public int follow;
+    public String sex;
+    public String image1;
+    public String image2;
 
     private String[] colors = new String[]{"#3F53B2", "#A17664", "#868A8B", "#ADADAD", "#5B5957", "#463C34", "#706942", "#252525"};
     transient private Palette.Swatch swatch;

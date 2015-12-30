@@ -61,4 +61,6 @@
     <string name="not_opened">暂未开放</string>
     <string name="about">About</string>
     <string name="user_detail">%1$s - Works:%2$d - Popularity:%3$d</string>
+    <string name="user_detail_single">作品:%1$d - 关注:%2$d - 粉丝:%3$d</string>
+    <string name="find_users">Find Users</string>
 </resources>
