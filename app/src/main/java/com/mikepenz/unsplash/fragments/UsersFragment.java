@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -161,9 +160,11 @@ public class UsersFragment extends Fragment {
             Log.d("qiqi", "success position:" + position + " count:" + imageList.getData().size());
             if(imageList.getData().size() >=1){
                 mUsers.get(position).setImage1(imageList.getData().get(0).getThumbnail());
+                mUsers.get(position).setImage1_standard(imageList.getData().get(0).getStandard_resolution());
             }
             if(imageList.getData().size() >=2){
                 mUsers.get(position).setImage2(imageList.getData().get(1).getThumbnail());
+                mUsers.get(position).setImage2_standard(imageList.getData().get(1).getStandard_resolution());
             }
             ArrayList<User> nUsers = mUsers;
             UserAdapter newAdapter = new UserAdapter(mUsers);

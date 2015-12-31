@@ -34,6 +34,8 @@ public class User implements Serializable {
     public int follow;
     public String sex;
     public String image1;
+    public String image1_standard;
+    public String image2_standard;
     public String image2;
 
     private String[] colors = new String[]{"#3F53B2", "#A17664", "#868A8B", "#ADADAD", "#5B5957", "#463C34", "#706942", "#252525"};
@@ -59,13 +61,23 @@ public class User implements Serializable {
         return image1;
     }
 
-    public void setImage2(String image2) {
+    public void setImage2_standard(String image2_standard) {
+        this.image2_standard = image2_standard;
+    }
+    public String getImage2_standard() {
+        return image2_standard;
+    }
+    public void setImage1_standard(String image1_standard) {
+        this.image1_standard = image1_standard;
+    }
+    public String getImage1_standard() {
+        return image1_standard;
+    } public void setImage2(String image2) {
         this.image2 = image2;
     }
     public String getImage2() {
         return image2;
     }
-
 
     public String getSex(){
         return sex;

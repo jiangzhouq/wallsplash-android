@@ -40,7 +40,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 
 	PFView				_pfview;
 	PFAsset 			_pfasset;
-    PFNavigationMode 	_currentNavigationMode = PFNavigationMode.MOTION;
+    PFNavigationMode 	_currentNavigationMode = PFNavigationMode.TOUCH;
 
 	boolean 			_updateThumb = true;;
     Timer 				_scrubberMonitorTimer;
@@ -71,7 +71,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 		_stopButton = (Button)findViewById(R.id.stopbutton);
 		_touchButton = (Button)findViewById(R.id.touchbutton);
 		_scrubber = (SeekBar)findViewById(R.id.scrubber);
-
+		_playButton.setClickable(false);
 		_playButton.setOnClickListener(playListener);
 		_stopButton.setOnClickListener(stopListener);
 		_touchButton.setOnClickListener(touchListener);
@@ -79,8 +79,9 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 
 		_scrubber.setEnabled(false);
 
-//		loadVideo("http://view.iyun720.com/iyun720_1450764126000_92688495.mp4");
-		loadVideo("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
+		String[] splitStrings = getIntent().getStringExtra("url").split("/");
+		loadVideo("http://view.iyun720.com/" + splitStrings[splitStrings.length - 1].replace("short_", ""));
+//		loadVideo("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
 
 		showControls(true);
 
@@ -141,6 +142,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 		{
 			case LOADED:
 				Log.d("SimplePlayer", "Loaded");
+				_playButton.setClickable(true);
 				break;
 			case DOWNLOADING:
 				Log.d("SimplePlayer", "Downloading 360� movie: "+_pfasset.getDownloadProgress()+" percent complete");

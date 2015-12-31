@@ -88,6 +88,16 @@ public class UserAdapter extends RecyclerView.Adapter<UsersViewHolder> {
 //        usersViewHolder.userDetail.setTextColor(mDefaultTextColor);
 
         //cancel any loading images on this view
+        if(mUsers.get(position).getImage1_standard()!=null && mUsers.get(position).getImage1_standard().contains(".mp4")){
+            usersViewHolder.imagePlay1.setVisibility(View.VISIBLE);
+        }else{
+            usersViewHolder.imagePlay1.setVisibility(View.GONE);
+        }
+        if(mUsers.get(position).getImage2_standard()!=null &&mUsers.get(position).getImage2_standard().contains(".mp4")){
+            usersViewHolder.imagePlay2.setVisibility(View.VISIBLE);
+        }else{
+            usersViewHolder.imagePlay2.setVisibility(View.GONE);
+        }
         Picasso.with(mContext).cancelRequest(usersViewHolder.imageView1);
         //load the image
         Picasso.with(mContext).load(mUsers.get(position).getImage1()).transform(PaletteTransformation.instance()).into(usersViewHolder.imageView1, new Callback.EmptyCallback() {
@@ -271,6 +281,8 @@ class UsersViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
 
     protected final ImageView imageView1;
     protected final ImageView imageView2;
+    protected final ImageView imagePlay1;
+    protected final ImageView imagePlay2;
     protected final ImageView user_profile;
     protected final TextView userAuthor;
     protected final TextView userDetail;
@@ -282,6 +294,8 @@ class UsersViewHolder extends RecyclerView.ViewHolder implements View.OnClickLis
         this.onItemClickListener = onItemClickListener;
 
         imageView1 = (ImageView) itemView.findViewById(R.id.item_image_img1);
+        imagePlay1 = (ImageView) itemView.findViewById(R.id.play1);
+        imagePlay2 = (ImageView) itemView.findViewById(R.id.play2);
         imageView2 = (ImageView) itemView.findViewById(R.id.item_image_img2);
         userAuthor = (TextView) itemView.findViewById(R.id.item_user_author);
         userDetail = (TextView) itemView.findViewById(R.id.item_user_detail);

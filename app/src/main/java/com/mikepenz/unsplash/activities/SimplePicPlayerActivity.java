@@ -11,7 +11,8 @@
 package com.mikepenz.unsplash.activities;
 
 import android.content.res.Configuration;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -39,8 +40,8 @@ import java.util.TimerTask;
 public class SimplePicPlayerActivity extends FragmentActivity implements PFAssetObserver, OnSeekBarChangeListener {
 
 	PFView				_pfview;
-	PFAsset 			_pfasset;
-    PFNavigationMode 	_currentNavigationMode = PFNavigationMode.MOTION;
+//	PFAsset 			_pfasset;
+    PFNavigationMode 	_currentNavigationMode = PFNavigationMode.TOUCH;
 
 	boolean 			_updateThumb = true;;
     Timer 				_scrubberMonitorTimer;
@@ -80,9 +81,10 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 		_scrubber.setEnabled(false);
 
 //		loadVideo("http://view.iyun720.com/iyun720_1450764126000_92688495.mp4");
-		loadVideo("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
+		loadVideo(getIntent().getStringExtra("url"));
 
-		showControls(true);
+
+		showControls(false);
 
 	}
 
@@ -120,9 +122,46 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
     {
 
 		_pfview = PFObjectFactory.view(this);
-		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse(filename), this);
-
-        _pfview.displayAsset(_pfasset);
+//		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse(filename), this);
+		Bitmap bitmapTmp;
+		try {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeFile(filename, options);
+//			bitmapTmp = BitmapFactory.decodeStream(is);
+			Log.d("qiqi", "options.outHeight:" + options.outHeight + " options.outWidth:" + options.outWidth);
+			options.inSampleSize = options.outHeight/1024;
+			options.inJustDecodeBounds = false;
+			bitmapTmp = BitmapFactory.decodeFile(filename, options);
+			bitmapTmp = Bitmap.createScaledBitmap(bitmapTmp, 2048, 1024,true);
+//			int dstHeight = 0;
+//			for(int i = 0; i < 14 ; i ++){
+//				if (options.outHeight > Math.pow( 2, i) && options.outHeight < Math.pow( 2, i + 1)){
+//					dstHeight = (int)Math.pow( 2, i);
+//				}
+//			}
+////			double dstWidth = dstHeight/2;
+////			Log.d("qiqi","dstWidth:" + dstWidth + " dstHeight:" + dstHeight);
+////			options.inSampleSize = 3;
+//			if(dstHeight > 2048){
+//				dstHeight = 2048;
+//			}else{
+//				dstHeight = 1024;
+//			}
+//			options.outWidth = dstHeight*2;
+//			options.outHeight = dstHeight;
+//			Log.d("qiqi","dstWidth:" + dstHeight*2 + " dstHeight:" + dstHeight);
+//			options.inJustDecodeBounds = false;
+//			bitmapTmp = BitmapFactory.decodeFile(filename, options);
+			_pfview.injectImage(bitmapTmp);
+		} finally {
+//			try {
+//				is.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+		}
+//        _pfview.displayAsset(_pfasset);
         _pfview.setNavigationMode(_currentNavigationMode);
 //		_pfview.handleOrientationChange();
         _frameContainer.addView(_pfview.getView(), 0);
@@ -143,7 +182,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 				Log.d("SimplePlayer", "Loaded");
 				break;
 			case DOWNLOADING:
-				Log.d("SimplePlayer", "Downloading 360� movie: "+_pfasset.getDownloadProgress()+" percent complete");
+//				Log.d("SimplePlayer", "Downloading 360� movie: "+_pfasset.getDownloadProgress()+" percent complete");
 				break;
 			case DOWNLOADED:
 				Log.d("SimplePlayer", "Downloaded to "+asset.getUrl());
@@ -200,12 +239,12 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 	 */
 	private OnClickListener playListener = new OnClickListener() {
 		public void onClick(View v) {
-			if (_pfasset.getStatus() == PFAssetStatus.PLAYING)
-			{
-				_pfasset.pause();
-			}
-			else
-				_pfasset.play();
+//			if (_pfasset.getStatus() == PFAssetStatus.PLAYING)
+//			{
+//				_pfasset.pause();
+//			}
+//			else
+//				_pfasset.play();
 		}
 	};
 
@@ -215,7 +254,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 	 */
 	private OnClickListener stopListener = new OnClickListener() {
 		public void onClick(View v) {
-			_pfasset.stop();
+//			_pfasset.stop();
 		}
 	};
 
@@ -261,11 +300,11 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 	 */
     public void onPause() {
         super.onPause();
-        if (_pfasset != null)
-        {
-	        if (_pfasset.getStatus() == PFAssetStatus.PLAYING)
-	        	_pfasset.pause();
-        }
+//        if (_pfasset != null)
+//        {
+//	        if (_pfasset.getStatus() == PFAssetStatus.PLAYING)
+//	        	_pfasset.pause();
+//        }
     }
 
 	/**
@@ -310,7 +349,6 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 //			Toast.makeText(MainActivity.this, "现在是竖屏", Toast.LENGTH_SHORT).show();
 			if(_pfview != null){
 				_pfview.setMode(0,1);
-				showControls(true);
 				_currentNavigationMode = PFNavigationMode.TOUCH;
 				_touchButton.setText("touch");
 				_pfview.setNavigationMode(_currentNavigationMode);
@@ -323,7 +361,6 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 
 			if(_pfview != null){
 				_pfview.setMode(2,1);
-				showControls(false);
 				_currentNavigationMode = PFNavigationMode.MOTION;
 				_touchButton.setText("motion");
 				_pfview.setNavigationMode(_currentNavigationMode);

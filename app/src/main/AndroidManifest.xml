@@ -64,7 +64,9 @@
         <activity android:name="com.mikepenz.unsplash.activities.SimpleStreamPlayerActivity"
             android:configChanges="orientation|screenSize">
         </activity>
-
+        <activity android:name="com.mikepenz.unsplash.activities.SimplePicPlayerActivity"
+            android:configChanges="orientation|screenSize">
+        </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.mikepenz.fileprovider"

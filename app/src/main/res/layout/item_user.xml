@@ -59,24 +59,46 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/image_without_palette">
-            <ImageView
-                android:id="@+id/item_image_img1"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="72dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:transitionName="imageCover"
-                android:scaleType="fitXY"
-                android:padding="2dp"/>
-            <ImageView
-                android:id="@+id/item_image_img2"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/item_image_img1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:transitionName="imageCover"
+                    android:scaleType="fitXY"
+                    android:padding="2dp"/>
+                <ImageView
+                    android:id="@+id/play1"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/play"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="72dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:transitionName="imageCover"
-                android:scaleType="fitXY"
-                android:padding="2dp"/>
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/item_image_img2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:transitionName="imageCover"
+                    android:scaleType="fitXY"
+                    android:padding="2dp"/>
+                <ImageView
+                    android:id="@+id/play2"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/play"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>

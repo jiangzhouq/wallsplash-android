@@ -552,8 +552,8 @@ public class DetailActivity extends AppCompatActivity {
                             Uri contentUri = FileProvider.getUriForFile(DetailActivity.this, "com.mikepenz.fileprovider", file);
 
                             if (set) {
-                                Intent intent = new Intent("com.mikepenz.cardboard.MyCardboardActivity");
-//                                Intent intent = new Intent(DetailActivity.this, SimplePicPlayerActivity.class);
+//                                Intent intent = new Intent("com.mikepenz.cardboard.MyCardboardActivity");
+                                Intent intent = new Intent(DetailActivity.this, SimplePicPlayerActivity.class);
                                 intent.putExtra("url", file.getAbsolutePath());
                                 Log.d("qiqi", "file.getPath():" + file.getAbsolutePath());
                                 startActivity(intent);

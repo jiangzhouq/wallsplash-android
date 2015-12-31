@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.unsplash.OnItemClickListener;
@@ -88,7 +89,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         imagesViewHolder.imageAuthor.setTextColor(mDefaultTextColor);
         imagesViewHolder.imageDate.setTextColor(mDefaultTextColor);
         imagesViewHolder.imageTextContainer.setBackgroundColor(mDefaultBackgroundColor);
-
+        if(mImages.get(position).getStandard_resolution().contains(".mp4")){
+            imagesViewHolder.playView.setVisibility(View.VISIBLE);
+        }else{
+            imagesViewHolder.playView.setVisibility(View.GONE);
+        }
         //cancel any loading images on this view
         Picasso.with(mContext).cancelRequest(imagesViewHolder.imageView);
         //load the image
@@ -146,7 +151,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         //image.width .... image.height
         //device.width ... device
         int finalHeight = (int) (displaymetrics.widthPixels / 3);
-        imagesViewHolder.imageView.setMinimumHeight(finalHeight);
+        imagesViewHolder.imageContainer.setMinimumHeight(finalHeight);
     }
 
     @Override
@@ -158,7 +163,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
 class ImagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     protected final FrameLayout imageTextContainer;
+    protected final RelativeLayout imageContainer;
+
     protected final ImageView imageView;
+    protected final ImageView playView;
     protected final TextView imageAuthor;
     protected final TextView imageDate;
     private final OnItemClickListener onItemClickListener;
@@ -172,7 +180,8 @@ class ImagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         imageView = (ImageView) itemView.findViewById(R.id.item_image_img);
         imageAuthor = (TextView) itemView.findViewById(R.id.item_image_author);
         imageDate = (TextView) itemView.findViewById(R.id.item_image_date);
-
+        playView = (ImageView) itemView.findViewById(R.id.play);
+        imageContainer = (RelativeLayout) itemView.findViewById(R.id.image_container);
         imageView.setOnClickListener(this);
 
     }
