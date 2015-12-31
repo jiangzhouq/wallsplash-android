@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import com.mikepenz.unsplash.models.ImageList;
 import com.mikepenz.unsplash.models.User;
 import com.mikepenz.unsplash.models.UserList;
 import com.mikepenz.unsplash.network.UnsplashApi;
-import com.mikepenz.unsplash.other.PaletteTransformation;
 import com.mikepenz.unsplash.views.adapters.ImageAdapter;
 import com.sch.rfview.AnimRFRecyclerView;
 import com.squareup.picasso.Picasso;
@@ -234,7 +232,11 @@ public class ImagesFragment extends Fragment {
         @Override
         public void onClick(View v, int position) {
 
-            Image selectedImage = mCurrentImages.get(position);
+            Log.d("qiqi", "position:" + position +
+                    " adapter.getcount:" + mImageAdapter.getItemCount() +
+                            " mCurrentImages.size:" + mCurrentImages.size() +
+                            " mImages.size:" + mImages.size());
+            Image selectedImage = mCurrentImages.get(position -2);
 
             Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
             detailIntent.putExtra("position", position);

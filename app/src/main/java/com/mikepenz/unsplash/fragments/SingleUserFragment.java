@@ -25,7 +25,6 @@ import com.mikepenz.unsplash.R;
 import com.mikepenz.unsplash.activities.DetailActivity;
 import com.mikepenz.unsplash.activities.MainActivity;
 import com.mikepenz.unsplash.activities.SingleUserActivity;
-import com.mikepenz.unsplash.activities.UserActivity;
 import com.mikepenz.unsplash.models.Image;
 import com.mikepenz.unsplash.models.ImageList;
 import com.mikepenz.unsplash.models.User;
@@ -33,12 +32,12 @@ import com.mikepenz.unsplash.models.UserList;
 import com.mikepenz.unsplash.network.UnsplashApi;
 import com.mikepenz.unsplash.views.adapters.ImageAdapter;
 import com.sch.rfview.AnimRFRecyclerView;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit.RetrofitError;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -147,7 +146,12 @@ public class SingleUserFragment extends Fragment {
             ArrayList<User> mUsers = users.getData();
 
             Log.d("qiqi", "1:" + "http://www.iyun720.com/data/avatar/000/00/00/" + mUsers.get(0).getUid() + "_avatar_middle.jpg");
-            Picasso.with(getActivity()).load("http://www.iyun720.com/data/avatar/000/00/00/"+ mUsers.get(0).getUid() +"_avatar_middle.jpg" ).into(mUserProfile);
+            Picasso.with(getActivity()).load("http://www.iyun720.com/data/avatar/000/00/00/"+ mUsers.get(0).getUid() +"_avatar_middle.jpg" ).into(mUserProfile, new Callback.EmptyCallback(){
+                @Override
+                public void onError() {
+                    mUserProfile.setImageResource(R.drawable.ic_launcher);
+                }
+            });
             mUserDetail.setText(String.format(getActivity().getResources().getString(R.string.user_detail_single),mUsers.get(0).getWorks() , mUsers.get(0).getFollow(), mUsers.get(0).getFollowed()));
         }
 
@@ -220,12 +224,17 @@ public class SingleUserFragment extends Fragment {
 
         @Override
         public void onClick(View v, int position) {
+            Log.d("qiqi", "position:" + position +
+                    " adapter.getcount:" + mImageAdapter.getItemCount() +
+                    " mCurrentImages.size:" + mCurrentImages.size() +
+                    " mImages.size:" + mImages.size());
 
-            Image selectedImage = mCurrentImages.get(position);
+            Image selectedImage = mCurrentImages.get(position -2);
 
             Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
             detailIntent.putExtra("position", position);
             detailIntent.putExtra("selected_image", selectedImage);
+            detailIntent.putExtra("from", 2 );//1 for ImageFragment 2 for singuserfragment
 
             if (selectedImage.getSwatch() != null) {
                 detailIntent.putExtra("swatch_title_text_color", selectedImage.getSwatch().getTitleTextColor());
@@ -250,9 +259,15 @@ public class SingleUserFragment extends Fragment {
 
                     // Setup the transition to the detail activity
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), coverImage, "cover");
-
+                    Log.d("qiqi", "start activity");
                     startActivity(detailIntent, options.toBundle());
+
+                }else{
+
+                    Log.d("qiqi", "2 null");
                 }
+            }else{
+                Log.d("qiqi", "1 null");
             }
         }
     };

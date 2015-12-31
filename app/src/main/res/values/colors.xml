@@ -5,8 +5,8 @@
     <color name="text_without_palette">#ffeae1da</color>
 
     <!-- default theme colors -->
-    <color name="primary">#3F51B5</color>
-    <color name="primary_dark">#303F9F</color>
+    <color name="primary">#176fb3</color>
+    <color name="primary_dark">#176fb3</color>
     <color name="primary_light">#C5CAE9</color>
     <color name="background">#ECECEC</color>
     <color name="accent">#03A9F4</color>
@@ -40,4 +40,5 @@
     <color name="about_libraries_text_openSource">#DEDEDE</color>
     <color name="about_libraries_dividerDark_openSource">#303030</color>
     <color name="about_libraries_dividerLight_openSource">#303030</color>
+    <color name="header_back_color">#176fb3</color>
 </resources>

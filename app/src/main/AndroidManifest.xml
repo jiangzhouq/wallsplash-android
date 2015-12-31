@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"></uses-permission>
 
     <application
         android:name="com.mikepenz.unsplash.CustomApplication"
@@ -58,6 +59,10 @@
         </activity>
         <activity android:name="com.mikepenz.unsplash.activities.DetailActivity"
                   android:theme="@style/AppTheme.DetailActivity">
+        </activity>
+
+        <activity android:name="com.mikepenz.unsplash.activities.SimpleStreamPlayerActivity"
+            android:configChanges="orientation|screenSize">
         </activity>
 
         <provider

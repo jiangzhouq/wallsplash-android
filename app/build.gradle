@@ -56,7 +56,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(include: '*.jar', dir: 'libs')
     //Android Asynchronous Networking and Image Loading
     compile 'com.koushikdutta.ion:ion:2.1.6'
     //which lets you extract prominent colors from an image
@@ -77,15 +77,11 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     //观察者模式
     compile 'io.reactivex:rxandroid:1.0.1'
-
     compile 'com.nispok:snackbar:2.11.0'
     compile 'com.gu:option:1.3'
-
     compile 'com.github.lzyzsd:circleprogress:1.2.0@aar'
     compile 'com.github.xiprox.errorview:library:1.0.0'
-
     compile 'com.google.android.apps.muzei:muzei-api:+'
-
     compile('com.mikepenz:aboutlibraries:5.2.6@aar') {
         transitive = true
     }
@@ -96,4 +92,5 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:1.2.0.1@aar'
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile files('libs/panframe-1.9.jar')
 }

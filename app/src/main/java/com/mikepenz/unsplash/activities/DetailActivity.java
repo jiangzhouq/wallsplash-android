@@ -13,8 +13,6 @@ import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -30,7 +28,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.koushikdutta.async.future.FutureCallback;
@@ -38,24 +35,20 @@ import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
 import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.future.ResponseFuture;
-import com.mikepenz.cardboard.MyCardboardActivity;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.unsplash.R;
-import com.mikepenz.unsplash.fragments.DirectoryChooserFragment;
 import com.mikepenz.unsplash.fragments.ImagesFragment;
+import com.mikepenz.unsplash.fragments.SingleUserFragment;
 import com.mikepenz.unsplash.models.Image;
 import com.mikepenz.unsplash.other.CustomAnimatorListener;
 import com.mikepenz.unsplash.other.CustomTransitionListener;
 import com.mikepenz.unsplash.other.PaletteTransformation;
 import com.mikepenz.unsplash.other.Utils;
 import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.listeners.ActionClickListener;
 
 import java.io.File;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Date;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -86,7 +79,7 @@ public class DetailActivity extends AppCompatActivity {
     private int mWallpaperHeight;
 
     private Animation mProgressFabAnimation;
-
+    private int from = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +101,7 @@ public class DetailActivity extends AppCompatActivity {
         // Recover items from the intent
         final int position = getIntent().getIntExtra("position", 0);
         mSelectedImage = (Image) getIntent().getSerializableExtra("selected_image");
+        from = (int)getIntent().getIntExtra("from", 1);
 
         mDrawablePhoto = new IconicsDrawable(this, FontAwesome.Icon.faw_photo).color(Color.WHITE).sizeDp(24);
         mDrawableClose = new IconicsDrawable(this, FontAwesome.Icon.faw_close).color(Color.WHITE).sizeDp(24);
@@ -158,7 +152,12 @@ public class DetailActivity extends AppCompatActivity {
 
         //get the imageHeader and set the coverImage
         final ImageView image = (ImageView) findViewById(R.id.activity_detail_image);
-        Bitmap imageCoverBitmap = ImagesFragment.photoCache.get(position);
+        Bitmap imageCoverBitmap = null;
+        if(from == 1){
+            imageCoverBitmap = ImagesFragment.photoCache.get(position);
+        }else{
+            imageCoverBitmap = SingleUserFragment.photoCache.get(position);
+        }
         //safety check to prevent nullPointer in the palette if the detailActivity was in the background for too long
         if (imageCoverBitmap == null || imageCoverBitmap.isRecycled()) {
             this.finish();
@@ -360,30 +359,37 @@ public class DetailActivity extends AppCompatActivity {
     private View.OnClickListener onFabButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (future == null) {
-                //prepare the call
-                future = Ion.with(DetailActivity.this)
-                        .load(mSelectedImage.getStandard_resolution())
-                        .progressHandler(progressCallback)
-                        .asInputStream();
+            if(mSelectedImage.getStandard_resolution().endsWith(".mp4")){
+                Intent intent = new Intent(DetailActivity.this, SimpleStreamPlayerActivity.class);
+                intent.putExtra("url", mSelectedImage.getStandard_resolution());
+                startActivity(intent);
+            }else{
+                if (future == null) {
+                    //prepare the call
+                    future = Ion.with(DetailActivity.this)
+                            .load(mSelectedImage.getStandard_resolution())
+                            .progressHandler(progressCallback)
+                            .asInputStream();
 
-                animateStart();
+                    animateStart();
 
-                mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        downloadAndSetOrShareImage(true);
-                        super.onAnimationEnd(animation);
-                    }
+                    mFabButton.animate().rotation(360).setDuration(ANIMATION_DURATION_LONG).setListener(new CustomAnimatorListener() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            downloadAndSetOrShareImage(true);
+                            super.onAnimationEnd(animation);
+                        }
 
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-                        super.onAnimationCancel(animation);
-                    }
-                }).start();
-            } else {
-                animateReset(false);
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+                            super.onAnimationCancel(animation);
+                        }
+                    }).start();
+                } else {
+                    animateReset(false);
+                }
             }
+
         }
     };
 
@@ -547,6 +553,7 @@ public class DetailActivity extends AppCompatActivity {
 
                             if (set) {
                                 Intent intent = new Intent("com.mikepenz.cardboard.MyCardboardActivity");
+//                                Intent intent = new Intent(DetailActivity.this, SimplePicPlayerActivity.class);
                                 intent.putExtra("url", file.getAbsolutePath());
                                 Log.d("qiqi", "file.getPath():" + file.getAbsolutePath());
                                 startActivity(intent);
