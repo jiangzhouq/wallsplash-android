@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:background="@color/theme_window_background"
+    android:background="@color/back_white"
     >
     <TextView
         android:layout_width="0dp"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:text="@string/find_users"
-        android:textColor="@color/text_without_palette"/>
+        android:textColor="@color/text_black_title"/>
     <RelativeLayout
         android:layout_width="96dp"
         android:layout_height="54dp">
@@ -26,7 +26,7 @@
             android:src="@drawable/ic_launcher"
             app:civ_border_width="2dp"
             android:layout_centerVertical="true"
-            app:civ_border_color="@color/theme_window_background"/>
+            app:civ_border_color="@color/back_white"/>
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/user_profile_2"
@@ -36,7 +36,7 @@
             app:civ_border_width="2dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
-            app:civ_border_color="@color/theme_window_background"/>
+            app:civ_border_color="@color/back_white"/>
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/user_profile_3"
@@ -46,7 +46,7 @@
             app:civ_border_width="2dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="60dp"
-            app:civ_border_color="@color/theme_window_background"/>
+            app:civ_border_color="@color/back_white"/>
     </RelativeLayout>
     <ImageView
         android:id="@+id/arrow"

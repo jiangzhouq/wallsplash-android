@@ -4,15 +4,17 @@
 	<shape android:shape="rectangle"
 	       android:dither="true">
 
-		<solid android:color="@color/activity_back" />
+		<corners android:radius="2dp"/>
+		<solid android:color="#ccc" />
 	</shape>
 </item>
 
-<item android:bottom="5dp">
+<item android:bottom="2dp">
 	<shape android:shape="rectangle"
 	       android:dither="true">
 
-		<solid android:color="@color/back_white" />
+		<corners android:radius="2dp" />
+		<solid android:color="@android:color/white" />
 		<padding android:bottom="8dp"
 		         android:left="8dp"
 		         android:right="8dp"

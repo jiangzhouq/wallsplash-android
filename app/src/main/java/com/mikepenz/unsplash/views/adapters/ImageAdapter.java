@@ -66,8 +66,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         this.mContext = viewGroup.getContext();
 
         //get the colors
-        mDefaultTextColor = mContext.getResources().getColor(R.color.text_without_palette);
-        mDefaultBackgroundColor = mContext.getResources().getColor(R.color.image_without_palette);
 
         //get the screenWidth :D optimize everything :D
         mScreenWidth = mContext.getResources().getDisplayMetrics().widthPixels;
@@ -79,16 +77,16 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
     public void onBindViewHolder(final ImagesViewHolder imagesViewHolder, final int position) {
 
         final Image currentImage = mImages.get(position);
-        imagesViewHolder.imageAuthor.setText(currentImage.getUsername());
+        imagesViewHolder.imageAuthor.setText(currentImage.getTitle());
 
         imagesViewHolder.imageDate.setText(DateFormat.getDateInstance().format(new Date(currentImage.getCreate_time())));
         //imagesViewHolder.imageView.setDrawingCacheEnabled(true);
         imagesViewHolder.imageView.setImageBitmap(null);
 
         //reset colors so we prevent crazy flashes :D
-        imagesViewHolder.imageAuthor.setTextColor(mDefaultTextColor);
-        imagesViewHolder.imageDate.setTextColor(mDefaultTextColor);
-        imagesViewHolder.imageTextContainer.setBackgroundColor(mDefaultBackgroundColor);
+//        imagesViewHolder.imageAuthor.setTextColor(mDefaultTextColor);
+//        imagesViewHolder.imageDate.setTextColor(mDefaultTextColor);
+//        imagesViewHolder.imageTextContainer.setBackgroundColor(mDefaultBackgroundColor);
         if(mImages.get(position).getStandard_resolution().contains(".mp4")){
             imagesViewHolder.playView.setVisibility(View.VISIBLE);
         }else{
@@ -122,9 +120,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
                                 mImages.get(position).setSwatch(s);
                             }
 
-                            imagesViewHolder.imageAuthor.setTextColor(s.getTitleTextColor());
-                            imagesViewHolder.imageDate.setTextColor(s.getTitleTextColor());
-                            Utils.animateViewColor(imagesViewHolder.imageTextContainer, mDefaultBackgroundColor, s.getRgb());
+//                            imagesViewHolder.imageAuthor.setTextColor(s.getTitleTextColor());
+//                            imagesViewHolder.imageDate.setTextColor(s.getTitleTextColor());
+//                            Utils.animateViewColor(imagesViewHolder.imageTextContainer, mDefaultBackgroundColor, s.getRgb());
                         }
                     }
                 }
@@ -135,12 +133,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
                 if (Build.VERSION.SDK_INT >= 21) {
                     imagesViewHolder.imageView.setTransitionName("cover" + position);
                 }
-                imagesViewHolder.imageTextContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onItemClickListener.onClick(v, position);
-                    }
-                });
+//                imagesViewHolder.imageTextContainer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        onItemClickListener.onClick(v, position);
+//                    }
+//                });
             }
 
         });

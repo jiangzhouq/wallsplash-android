@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- item image -->
-    <color name="image_without_palette">#1C1D23</color>
+    <color name="image_without_palette">#fffffe</color>
     <color name="text_without_palette">#ffeae1da</color>
 
     <!-- default theme colors -->
@@ -34,11 +34,16 @@
     <color name="error_view_text_dark">#DEDEDE</color>
 
     <!-- AboutLibraries DARK colors -->
-    <color name="theme_window_background">#303030</color>
+    <color name="theme_window_background">#fffffe</color>
     <color name="about_libraries_card">#666666</color>
     <color name="about_libraries_title_openSource">#ffffffff</color>
     <color name="about_libraries_text_openSource">#DEDEDE</color>
     <color name="about_libraries_dividerDark_openSource">#303030</color>
     <color name="about_libraries_dividerLight_openSource">#303030</color>
     <color name="header_back_color">#176fb3</color>
+    <color name="text_black_pic_name">#474a4d</color>
+    <color name="text_black_pic_tag">#8e9499</color>
+    <color name="text_black_title">#5f6366</color>
+    <color name="activity_back">#bec6cc</color>
+    <color name="back_white">#fffffe</color>
 </resources>

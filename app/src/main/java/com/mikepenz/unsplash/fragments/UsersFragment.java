@@ -91,6 +91,7 @@ public class UsersFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_users, container, false);
         mImageRecycler = (AnimRFRecyclerView) rootView.findViewById(R.id.fragment_last_images_recycler);
+        mImageRecycler.setColor(R.color.back_white, R.color.back_white);
         mImagesProgress = (ProgressBar) rootView.findViewById(R.id.fragment_images_progress);
         mImagesErrorView = (ErrorView) rootView.findViewById(R.id.fragment_images_error_view);
 

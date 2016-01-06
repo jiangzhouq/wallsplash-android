@@ -13,6 +13,8 @@ package com.mikepenz.unsplash.activities;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -43,21 +46,44 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
     PFNavigationMode 	_currentNavigationMode = PFNavigationMode.TOUCH;
 
 	boolean 			_updateThumb = true;;
+	boolean				_choose_resolution = false;
     Timer 				_scrubberMonitorTimer;
 
     ViewGroup 			_frameContainer;
 	Button				_stopButton;
 	Button				_playButton;
 	Button				_touchButton;
+	Button				_resolution;
+	Button				_resolution_1080;
+	Button				_resolution_720;
+	Button				_resolution_640;
+	Button				_resolution_origin;
 	SeekBar				_scrubber;
 	//0 for not ready, 1 for ready, 2 for , 3 for playing, 4 for stoped
 	private int state = 0;
+	private String uuurl_www = "";
+	private String uuurl_name = "";
+	private ProgressBar _loadingProgress;
 	/**
 	 * Creation and initalization of the Activitiy.
 	 * Initializes variables, listeners, and starts request of a movie list.
 	 *
 	 * @param  savedInstanceState  a saved instance of the Bundle
 	 */
+	Handler handler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			switch(msg.what){
+				case 0:
+					_loadingProgress.setVisibility(View.GONE);
+					break;
+				case 1:
+					_loadingProgress.setVisibility(View.VISIBLE);
+					break;
+			}
+		}
+	};
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -70,17 +96,30 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 		_playButton = (Button)findViewById(R.id.playbutton);
 		_stopButton = (Button)findViewById(R.id.stopbutton);
 		_touchButton = (Button)findViewById(R.id.touchbutton);
+		_resolution = (Button)findViewById(R.id.resolution);
+		_resolution_1080 = (Button)findViewById(R.id.resolution_1080);
+		_resolution_720 = (Button)findViewById(R.id.resolution_720);
+		_resolution_640 = (Button)findViewById(R.id.resolution_640);
+		_resolution_origin = (Button)findViewById(R.id.resolution_origin);
 		_scrubber = (SeekBar)findViewById(R.id.scrubber);
 		_playButton.setClickable(false);
 		_playButton.setOnClickListener(playListener);
 		_stopButton.setOnClickListener(stopListener);
 		_touchButton.setOnClickListener(touchListener);
 		_scrubber.setOnSeekBarChangeListener(this);
+		_resolution.setOnClickListener(resolutionListener);
+		_resolution_1080.setOnClickListener(resolution1080pListener);
+		_resolution_720.setOnClickListener(resolution720pListener);
+		_resolution_640.setOnClickListener(resolution640pListener);
+		_resolution_origin.setOnClickListener(resolutionOriginListener);
+		_loadingProgress = (ProgressBar) findViewById(R.id.video_progress);
 
 		_scrubber.setEnabled(false);
 
 		String[] splitStrings = getIntent().getStringExtra("url").split("/");
-		loadVideo("http://view.iyun720.com/" + splitStrings[splitStrings.length - 1].replace("short_", ""));
+		uuurl_www = "http://view.iyun720.com/";
+		uuurl_name = splitStrings[splitStrings.length - 1].replace("short_", "");
+		loadVideo(uuurl_www + "1280_" + uuurl_name);
 //		loadVideo("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
 
 		showControls(true);
@@ -103,7 +142,12 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 		_stopButton.setVisibility(View.GONE);
 		_touchButton.setVisibility(View.GONE);
 		_scrubber.setVisibility(visibility);
-
+		_resolution.setVisibility(visibility);
+		_resolution_1080.setVisibility(View.GONE);
+		_resolution_640.setVisibility(View.GONE);
+		_resolution_720.setVisibility(View.GONE);
+		_resolution_origin.setVisibility(View.GONE);
+		_loadingProgress.setVisibility(visibility);
 		if (_pfview != null)
 		{
 			if (!_pfview.supportsNavigationMode(PFNavigationMode.MOTION))
@@ -119,7 +163,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 	 */
     public void loadVideo(String filename)
     {
-
+		Log.d("qiqi",filename);
 		_pfview = PFObjectFactory.view(this);
 		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse(filename), this);
 
@@ -137,11 +181,13 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 	 * @param  asset  The asset who is calling the function
 	 * @param  status The current status of the asset.
 	 */
+	private float last_playback = 0;
 	public void onStatusMessage(final PFAsset asset, PFAssetStatus status) {
 		Log.d("qiqi", "changed");
 		switch (status)
 		{
 			case LOADED:
+
 				Log.d("SimplePlayer", "Loaded");
 				_playButton.setClickable(true);
 				_pfasset.play();
@@ -156,6 +202,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 				Log.d("SimplePlayer", "Download cancelled");
 				break;
 			case PLAYING:
+				handler.sendEmptyMessage(0);
 				Log.d("SimplePlayer", "Playing");
 		        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 				_scrubber.setEnabled(true);
@@ -165,12 +212,22 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 					public void run() {
 						if (_updateThumb)
 						{
+
+							Log.d("qiqi", "_scrubber.getProgress():" + _scrubber.getProgress() + " asset.getPlaybackTime():" + asset.getPlaybackTime());
+							if(asset.getPlaybackTime() == last_playback){
+								if(_loadingProgress.getVisibility() == View.GONE)
+									handler.sendEmptyMessage(1);
+							}else{
+								if(_loadingProgress.getVisibility() == View.VISIBLE)
+									handler.sendEmptyMessage(0);
+							}
+							last_playback = asset.getPlaybackTime();
 							_scrubber.setMax((int) asset.getDuration());
 							_scrubber.setProgress((int) asset.getPlaybackTime());
 						}
 					}
 				};
-				_scrubberMonitorTimer.schedule(task, 0, 33);
+				_scrubberMonitorTimer.schedule(task, 0, 500);
 				break;
 			case PAUSED:
 				Log.d("SimplePlayer", "Paused");
@@ -179,7 +236,8 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 			case STOPPED:
 				Log.d("SimplePlayer", "Stopped");
 				_playButton.setText("play");
-				_scrubberMonitorTimer.cancel();
+				if(_scrubberMonitorTimer != null)
+					_scrubberMonitorTimer.cancel();
 				_scrubberMonitorTimer = null;
 				_scrubber.setProgress(0);
 				_scrubber.setEnabled(false);
@@ -223,6 +281,117 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 			_pfasset.stop();
 		}
 	};
+
+	private OnClickListener resolutionListener = new OnClickListener() {
+		public void onClick(View v) {
+			if(_choose_resolution){
+				_choose_resolution = false;
+				_resolution_1080.setVisibility(View.GONE);
+				_resolution_640.setVisibility(View.GONE);
+				_resolution_720.setVisibility(View.GONE);
+				_resolution_origin.setVisibility(View.GONE);
+			}else{
+				_choose_resolution = true;
+				_resolution_1080.setVisibility(View.VISIBLE);
+				_resolution_640.setVisibility(View.VISIBLE);
+				_resolution_720.setVisibility(View.VISIBLE);
+				_resolution_origin.setVisibility(View.VISIBLE);
+			}
+		}
+	};
+	private void hideResolutions(){
+		_choose_resolution = false;
+		_resolution_1080.setVisibility(View.GONE);
+		_resolution_640.setVisibility(View.GONE);
+		_resolution_720.setVisibility(View.GONE);
+		_resolution_origin.setVisibility(View.GONE);
+	}
+	private OnClickListener resolution1080pListener = new OnClickListener() {
+		public void onClick(View v) {
+			hideResolutions();
+			handler.sendEmptyMessage(1);
+			float dur = _pfasset.getPlaybackTime();
+			if (_pfasset != null)
+			{
+				_pfasset.stop();
+				_pfasset.release();
+			}
+			if(_pfview != null){
+				_pfview.release();
+			}
+			_frameContainer.removeViewAt(0);
+			loadVideo(uuurl_www + "1920_" + uuurl_name);
+			_pfasset.setPLaybackTime(dur);
+		}
+	};
+
+	private OnClickListener resolution720pListener = new OnClickListener() {
+		public void onClick(View v) {
+			hideResolutions();
+			handler.sendEmptyMessage(1);
+			float dur = _pfasset.getPlaybackTime();
+			if (_pfasset != null)
+			{
+				_pfasset.stop();
+				_pfasset.release();
+			}
+			if(_pfview != null){
+				_pfview.release();
+			}
+			_frameContainer.removeViewAt(0);
+			loadVideo(uuurl_www + "1280_" + uuurl_name);
+			_pfasset.setPLaybackTime(dur);
+		}
+	};
+
+	private OnClickListener resolution640pListener = new OnClickListener() {
+		public void onClick(View v) {
+			hideResolutions();
+			handler.sendEmptyMessage(1);
+			float dur = _pfasset.getPlaybackTime();
+			if (_pfasset != null)
+			{
+				_pfasset.stop();
+				_pfasset.release();
+			}
+			if(_pfview != null){
+				_pfview.release();
+			}
+			_frameContainer.removeViewAt(0);
+			loadVideo(uuurl_www + "854_" + uuurl_name);
+			_pfasset.setPLaybackTime(dur);
+		}
+	};
+	private OnClickListener resolutionOriginListener = new OnClickListener() {
+		public void onClick(View v) {
+			hideResolutions();
+			handler.sendEmptyMessage(1);
+			float dur = _pfasset.getPlaybackTime();
+			if (_pfasset != null)
+			{
+				_pfasset.stop();
+				_pfasset.release();
+			}
+			if(_pfview != null){
+				_pfview.release();
+			}
+			_frameContainer.removeViewAt(0);
+			loadVideo(uuurl_www + uuurl_name);
+			_pfasset.setPLaybackTime(dur);
+		}
+	};
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (_pfasset != null)
+		{
+			_pfasset.stop();
+			_pfasset.release();
+		}
+		if(_pfview != null){
+			_pfview.release();
+		}
+	}
 
 	/**
 	 * Click listener for the navigation mode (touch/motion (if available))

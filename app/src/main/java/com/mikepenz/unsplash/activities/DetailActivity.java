@@ -770,7 +770,7 @@ public class DetailActivity extends AppCompatActivity {
      * @param rgb
      */
     private void setColors(int titleTextColor, int rgb) {
-        mTitleContainer.setBackgroundColor(rgb);
+//        mTitleContainer.setBackgroundColor(rgb);
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(titleTextColor);
@@ -778,20 +778,20 @@ public class DetailActivity extends AppCompatActivity {
         //getWindow().setNavigationBarColor(vibrantSwatch.getRgb());
 
         TextView titleTV = (TextView) mTitleContainer.findViewById(R.id.activity_detail_title);
-        titleTV.setTextColor(titleTextColor);
+//        titleTV.setTextColor(titleTextColor);
         titleTV.setText(mSelectedImage.getTitle());
 
         TextView tagTV = (TextView) mTitleContainer.findViewById(R.id.activity_detail_tag);
-        tagTV.setTextColor(titleTextColor);
+//        tagTV.setTextColor(titleTextColor);
         if(mSelectedImage.getTag() != null && !mSelectedImage.getTag().isEmpty())
             tagTV.setText("/" + mSelectedImage.getTag());
 
         TextView subtitleTV = (TextView) mTitleContainer.findViewById(R.id.activity_detail_subtitle);
-        subtitleTV.setTextColor(titleTextColor);
+//        subtitleTV.setTextColor(titleTextColor);
         subtitleTV.setText(mSelectedImage.getSummary().replace("&lt;", "").replace("/p&gt;","").replace("p&gt;",""));
 
-        ((TextView) mTitleContainer.findViewById(R.id.activity_detail_subtitle))
-                .setTextColor(titleTextColor);
+//        ((TextView) mTitleContainer.findViewById(R.id.activity_detail_subtitle))
+//                .setTextColor(titleTextColor);
     }
 
 

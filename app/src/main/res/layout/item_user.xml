@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/image_without_palette">
+        android:background="@color/back_white">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/text_without_palette"
+                    android:textColor="@color/text_black_pic_name"
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="16sp"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:textColor="@color/text_without_palette"
+                    android:textColor="@color/text_black_pic_tag"
                     android:lines="1"
                     android:ellipsize="end"
                     android:textSize="11sp"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/image_without_palette">
+            android:background="@color/back_white">
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="72dp"

@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="128dp"
                 android:layout_below="@id/activity_detail_image"
-                android:background="#00FFFFFF"
+                android:background="@color/back_white"
                 >
 
                 <RelativeLayout
@@ -55,7 +55,7 @@
                         android:ellipsize="end"
                         android:textSize="24sp"
                         android:maxLines="2"
-                        android:textColor="#FFF"
+                        android:textColor="@color/text_black_pic_name"
                         />
                     <TextView
                         android:id="@+id/activity_detail_tag"
@@ -67,7 +67,7 @@
                         android:text=""
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textColor="#FFF"
+                        android:textColor="@color/text_black_pic_name"
                         android:layout_alignBaseline="@id/activity_detail_title"
                         />
                     <TextView
@@ -80,7 +80,7 @@
                         android:text=""
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textColor="#FFF"
+                        android:textColor="@color/text_black_pic_tag"
                         />
 
                 </RelativeLayout>
