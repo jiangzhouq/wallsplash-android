@@ -138,11 +138,13 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 	 * @param  status The current status of the asset.
 	 */
 	public void onStatusMessage(final PFAsset asset, PFAssetStatus status) {
+		Log.d("qiqi", "changed");
 		switch (status)
 		{
 			case LOADED:
 				Log.d("SimplePlayer", "Loaded");
 				_playButton.setClickable(true);
+				_pfasset.play();
 				break;
 			case DOWNLOADING:
 				Log.d("SimplePlayer", "Downloading 360� movie: "+_pfasset.getDownloadProgress()+" percent complete");
@@ -186,7 +188,8 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 			case COMPLETE:
 				Log.d("SimplePlayer", "Complete");
 				_playButton.setText("play");
-				_scrubberMonitorTimer.cancel();
+				if(_scrubberMonitorTimer != null)
+					_scrubberMonitorTimer.cancel();
 				_scrubberMonitorTimer = null;
 		        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 				break;
