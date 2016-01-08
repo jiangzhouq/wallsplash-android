@@ -49,6 +49,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
     ViewGroup 			_frameContainer;
 	Button				_stopButton;
 	Button				_playButton;
+	Button				_resolution;
 	Button				_touchButton;
 	SeekBar				_scrubber;
 	//0 for not ready, 1 for ready, 2 for , 3 for playing, 4 for stoped
@@ -71,6 +72,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 		_playButton = (Button)findViewById(R.id.playbutton);
 		_stopButton = (Button)findViewById(R.id.stopbutton);
 		_touchButton = (Button)findViewById(R.id.touchbutton);
+		_resolution = (Button)findViewById(R.id.resolution);
 		_scrubber = (SeekBar)findViewById(R.id.scrubber);
 
 		_playButton.setOnClickListener(playListener);
@@ -104,7 +106,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 		_stopButton.setVisibility(View.GONE);
 		_touchButton.setVisibility(View.GONE);
 		_scrubber.setVisibility(visibility);
-
+		_resolution.setVisibility(visibility);
 		if (_pfview != null)
 		{
 			if (!_pfview.supportsNavigationMode(PFNavigationMode.MOTION))

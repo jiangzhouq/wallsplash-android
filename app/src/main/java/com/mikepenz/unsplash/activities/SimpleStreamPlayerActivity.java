@@ -165,7 +165,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
     {
 		Log.d("qiqi",filename);
 		_pfview = PFObjectFactory.view(this);
-		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse(filename), this);
+		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"), this);
 
         _pfview.displayAsset(_pfasset);
         _pfview.setNavigationMode(_currentNavigationMode);
