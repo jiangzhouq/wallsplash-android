@@ -52,6 +52,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 	Button				_resolution;
 	Button				_touchButton;
 	SeekBar				_scrubber;
+	Bitmap bitmapTmp;
 	//0 for not ready, 1 for ready, 2 for , 3 for playing, 4 for stoped
 	private int state = 0;
 	/**
@@ -125,7 +126,6 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 
 		_pfview = PFObjectFactory.view(this);
 //		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse(filename), this);
-		Bitmap bitmapTmp;
 		try {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inJustDecodeBounds = true;
@@ -135,7 +135,7 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 			options.inSampleSize = options.outHeight/1024;
 			options.inJustDecodeBounds = false;
 			bitmapTmp = BitmapFactory.decodeFile(filename, options);
-			bitmapTmp = Bitmap.createScaledBitmap(bitmapTmp, 2048, 1024,true);
+			bitmapTmp = Bitmap.createScaledBitmap(bitmapTmp, 4096, 2048,true);
 //			int dstHeight = 0;
 //			for(int i = 0; i < 14 ; i ++){
 //				if (options.outHeight > Math.pow( 2, i) && options.outHeight < Math.pow( 2, i + 1)){
@@ -369,5 +369,18 @@ public class SimplePicPlayerActivity extends FragmentActivity implements PFAsset
 				_pfview.handleOrientationChange();
 			}
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(bitmapTmp != null && ! bitmapTmp.isRecycled())
+			bitmapTmp.recycle();
 	}
 }
