@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.mikepenz.unsplash">
+          package="com.iyun.unsplash">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
@@ -13,14 +13,14 @@
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"></uses-permission>
 
     <application
-        android:name="com.mikepenz.unsplash.CustomApplication"
+        android:name="com.iyun.unsplash.CustomApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.mikepenz.unsplash.activities.MainActivity"
+            android:name="com.iyun.unsplash.activities.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name">
 
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mikepenz.unsplash.activities.UserActivity"
+            android:name="com.iyun.unsplash.activities.UserActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mikepenz.unsplash.activities.SingleUserActivity"
+            android:name="com.iyun.unsplash.activities.SingleUserActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mikepenz.cardboard.MyCardboardActivity"
+            android:name="com.iyun.cardboard.MyCardboardActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize" >
@@ -57,14 +57,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.mikepenz.unsplash.activities.DetailActivity"
+        <activity android:name="com.iyun.unsplash.activities.DetailActivity"
                   android:theme="@style/AppTheme.DetailActivity">
         </activity>
 
-        <activity android:name="com.mikepenz.unsplash.activities.SimpleStreamPlayerActivity"
+        <activity android:name="com.iyun.unsplash.activities.SimpleStreamPlayerActivity"
             android:configChanges="orientation|screenSize">
         </activity>
-        <activity android:name="com.mikepenz.unsplash.activities.SimplePicPlayerActivity"
+        <activity android:name="com.iyun.unsplash.activities.SimplePicPlayerActivity"
             android:configChanges="orientation|screenSize">
         </activity>
         <provider
@@ -77,7 +77,7 @@
                 android:resource="@xml/paths"/>
         </provider>
 
-        <service android:name=".muzei.WallSplashSource"
+        <service android:name="com.iyun.unsplash.muzei.WallSplashSource"
                  android:label="@string/app_name"
                  android:description="@string/muzei_description"
                  android:icon="@drawable/ic_source">

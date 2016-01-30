@@ -10,7 +10,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.mikepenz.unsplash"
+        applicationId "com.iyun.unsplash"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1

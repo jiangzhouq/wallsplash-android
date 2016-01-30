@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/ly_last_images_fragment"
-        android:name="com.mikepenz.unsplash.fragments.UsersFragment"
+        android:name="com.iyun.unsplash.fragments.UsersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center" />

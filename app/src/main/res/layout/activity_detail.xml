@@ -7,7 +7,7 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:background="#AA000000">
-    <com.mikepenz.unsplash.views.views.ObservableScrollView
+    <com.iyun.unsplash.views.views.ObservableScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -151,5 +151,5 @@
                 />
 
         </RelativeLayout>
-    </com.mikepenz.unsplash.views.views.ObservableScrollView>
+    </com.iyun.unsplash.views.views.ObservableScrollView>
 </RelativeLayout>
