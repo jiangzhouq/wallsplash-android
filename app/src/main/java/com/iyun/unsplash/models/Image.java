@@ -31,7 +31,7 @@ public class Image implements Serializable {
     private int mid;
     private int comment;
     private int create_time;
-    private int province;
+    private String province;
     private String city;
     private int type;
     private int popular;
@@ -41,6 +41,7 @@ public class Image implements Serializable {
     private String thumbnail;
     private String low_resolution;
     private String standard_resolution;
+    private String music;
 
     private String[] colors = new String[]{"#3F53B2", "#A17664", "#868A8B", "#ADADAD", "#5B5957", "#463C34", "#706942", "#252525"};
     transient private Palette.Swatch swatch;
@@ -58,6 +59,22 @@ public class Image implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+    public String getLow_resolution() {
+        return low_resolution;
+    }
+
+    public void setLow_resolution(String low_resolution) {
+        this.low_resolution = low_resolution;
+    }
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
+    }
+
 
     public String getUser_profile(){
         return user_profile;
@@ -81,11 +98,32 @@ public class Image implements Serializable {
         this.favorite = favorite;
     }
 
+    public int getComment() {
+        return comment;
+    }
+    public void setComment(int comment) {
+        this.comment = comment;
+    }
+
+    public int getType() {
+        return type;
+    }
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getUid() {
         return uid;
     }
     public void setUid(int uid) {
         this.uid = uid;
+    }
+
+    public int getPopular() {
+        return popular;
+    }
+    public void setPopular(int popular) {
+        this.popular = popular;
     }
 
     public int getMid() {
@@ -102,10 +140,10 @@ public class Image implements Serializable {
         this.create_time = create_time;
     }
 
-    public int getProvince() {
+    public String getProvince() {
         return province;
     }
-    public void setProvince(int province) {
+    public void setProvince(String province) {
         this.province = province;
     }
 

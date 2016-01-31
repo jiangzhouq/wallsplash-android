@@ -23,7 +23,7 @@ import retrofit.http.Query;
 import rx.Observable;
 
 public class UnsplashApi {
-    public static final String ENDPOINT = "http://t.iyun720.com:12342/";
+    public static final String ENDPOINT = "http://t.iyun720.com:12343/";
     private final UnsplashService mWebService;
 
     public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create(); //2015-01-18 15:48:56
@@ -57,10 +57,10 @@ public class UnsplashApi {
 
     public interface UnsplashService {
         @GET("/?action=19")
-        Observable<ImageList> listImages();
+        Observable<ImageList> listImages(@Query("order") int action,@Query("begin") int begin ,@Query("number") int number ,@Query("type") int type);
 
         @GET("/?action=20")
-        Observable<UserList> listUsers();
+        Observable<UserList> listUsers(@Query("order") int action,@Query("begin") int begin ,@Query("number") int number);
 
         @GET("/")
         Observable<ImageList> listUserImages(@Query("action") int action ,@Query("uid") int uid);
@@ -75,12 +75,12 @@ public class UnsplashApi {
         Image random();
     }
 
-    public Observable<ImageList> fetchImages() {
-        return mWebService.listImages();
+    public Observable<ImageList> fetchImages(int order, int begin, int number, int type) {
+        return mWebService.listImages(order, begin, number, type);
     }
 
-    public Observable<UserList> fetchUsers() {
-        return mWebService.listUsers();
+    public Observable<UserList> fetchUsers(int order, int begin, int number) {
+        return mWebService.listUsers(order, begin, number);
     }
 
     public Observable<ImageList> fetchUserImages(int uid) {

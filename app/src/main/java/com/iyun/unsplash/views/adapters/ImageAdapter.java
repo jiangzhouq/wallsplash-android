@@ -52,7 +52,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
 
     public void updateData(ArrayList<Image> images) {
         this.mImages = images;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     @Override

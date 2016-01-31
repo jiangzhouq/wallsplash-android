@@ -127,7 +127,7 @@ public class UsersFragment extends Fragment {
             mImagesErrorView.setVisibility(View.GONE);
 
             // Load images from API
-            mApi.fetchUsers().cache().subscribeOn(Schedulers.newThread())
+            mApi.fetchUsers(1, 0, 10).cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
 //        }

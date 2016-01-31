@@ -7,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
@@ -31,6 +33,7 @@ import com.iyun.unsplash.models.ImageList;
 import com.iyun.unsplash.network.UnsplashApi;
 import com.iyun.unsplash.views.adapters.ImageAdapter;
 import com.sch.rfview.AnimRFRecyclerView;
+import com.sch.rfview.manager.AnimRFGridLayoutManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,7 +54,7 @@ public class ImagesFragment extends Fragment {
     private UnsplashApi mApi = new UnsplashApi();
 
     private ImageAdapter mImageAdapter;
-    private ArrayList<Image> mImages;
+    private ArrayList<Image> mImages = new ArrayList<Image>();
     private ArrayList<Image> mCurrentImages;
     private AnimRFRecyclerView mImageRecycler;
     private ProgressBar mImagesProgress;
@@ -59,6 +62,25 @@ public class ImagesFragment extends Fragment {
     private CircleImageView mUserProfile1;
     private CircleImageView mUserProfile2;
     private CircleImageView mUserProfile3;
+    private int mPicCountPerGet = 20;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case 0:
+                    // 刷新完成后调用，必须在UI线程中
+                    mImageRecycler.refreshComplate();
+                    // 或者 刷新完成后调用，必须在UI线程中
+                    mImageRecycler.setRefresh(false);
+                    break;
+                case 1:
+                    // 加载更多完成后调用，必须在UI线程中
+                    mImageRecycler.loadMoreComplate();
+                    break;
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -67,17 +89,17 @@ public class ImagesFragment extends Fragment {
             ((MainActivity) ImagesFragment.this.getActivity()).setOnFilterChangedListener(new MainActivity.OnFilterChangedListener() {
                 @Override
                 public void onFilterChanged(int filter) {
-                    if (mImages != null) {
-                        if (filter == MainActivity.Category.ALL.id) {
-                            showAll();
-                        } else if (filter == MainActivity.Category.FEATURED.id) {
-                            showFeatured();
-                        } else if (filter == MainActivity.Category.LOVED.id) {
-                            //TODO
-                        } else {
-                            showCategory(filter);
-                        }
-                    }
+//                    if (mImages != null) {
+//                        if (filter == MainActivity.Category.ALL.id) {
+//                            showAll();
+//                        } else if (filter == MainActivity.Category.FEATURED.id) {
+//                            showFeatured();
+//                        } else if (filter == MainActivity.Category.LOVED.id) {
+//                            //TODO
+//                        } else {
+//                            showCategory(filter);
+//                        }
+//                    }
                 }
             });
         }
@@ -103,10 +125,10 @@ public class ImagesFragment extends Fragment {
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).startActivity(new Intent(getActivity(), UserActivity.class));
+                ((MainActivity) getActivity()).startActivity(new Intent(getActivity(), UserActivity.class));
             }
         });
-        mImageRecycler.setLayoutManager(gridLayoutManager);
+        mImageRecycler.setLayoutManager(new AnimRFGridLayoutManager(getActivity(), 1));
         mImageRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -117,6 +139,22 @@ public class ImagesFragment extends Fragment {
         mImageAdapter = new ImageAdapter();
         mImageAdapter.setOnItemClickListener(recyclerRowClickListener);
         mImageRecycler.setAdapter(mImageAdapter);
+        mImageRecycler.setLoadDataListener(new AnimRFRecyclerView.LoadDataListener(){
+            @Override
+            public void onRefresh() {
+                Log.d("qiqi", "onRefresh");
+                handler.sendEmptyMessage(0);
+            }
+
+            @Override
+            public void onLoadMore() {
+                Log.d("qiqi", "onLoadMore");
+                mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 0).cache().subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+                handler.sendEmptyMessage(1);
+            }
+        });
 
         showAll();
 
@@ -129,21 +167,22 @@ public class ImagesFragment extends Fragment {
     }
 
     private void showAll() {
-        if (mImages != null) {
-            updateAdapter(mImages);
-        } else {
-            mImagesProgress.setVisibility(View.VISIBLE);
-            mImageRecycler.setVisibility(View.GONE);
-            mImagesErrorView.setVisibility(View.GONE);
+//        if (mImages != null) {
+//            updateAdapter(mImages);
+//        } else {
+        mImages.clear();
+        mImagesProgress.setVisibility(View.VISIBLE);
+        mImageRecycler.setVisibility(View.GONE);
+        mImagesErrorView.setVisibility(View.GONE);
 
-            // Load images from API
-            mApi.fetchImages().cache().subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(observer);
-            mApi.fetchUsers().cache().subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(topUserobserver);
-        }
+        // Load images from API
+        mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 0).cache().subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        mApi.fetchUsers(1, 0, 10).cache().subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topUserobserver);
+//        }
     }
     private Observer<UserList> topUserobserver = new Observer<UserList>() {
         @Override
@@ -182,7 +221,7 @@ public class ImagesFragment extends Fragment {
     private Observer<ImageList> observer = new Observer<ImageList>() {
         @Override
         public void onNext(final ImageList images) {
-            mImages = images.getData();
+            mImages.addAll(images.getData());
             updateAdapter(mImages);
 
             if (ImagesFragment.this.getActivity() instanceof MainActivity) {
@@ -296,7 +335,8 @@ public class ImagesFragment extends Fragment {
     private void updateAdapter(ArrayList<Image> images) {
         mCurrentImages = images;
         mImageAdapter.updateData(mCurrentImages);
-        mImageRecycler.scrollToPosition(0);
+        mImageRecycler.getAdapter().notifyDataSetChanged();
+//        mImageRecycler.scrollToPosition(0);
         /*
         mImageAdapter = new ImageAdapter(images);
         mImageAdapter.setOnItemClickListener(recyclerRowClickListener);
