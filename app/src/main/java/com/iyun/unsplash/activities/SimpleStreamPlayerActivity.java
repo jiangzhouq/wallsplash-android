@@ -88,7 +88,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		setContentView(R.layout.activity_main_panframe);
+		setContentView(R.layout.activity_main_panframe_pic);
 
         _frameContainer = (ViewGroup) findViewById(R.id.framecontainer);
         _frameContainer.setBackgroundColor(0xFF000000);

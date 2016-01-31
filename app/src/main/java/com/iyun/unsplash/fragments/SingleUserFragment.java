@@ -276,15 +276,15 @@ public class SingleUserFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_shuffle) {
-            if (mImages != null) {
-                //we don't want to shuffle the original list
-                ArrayList<Image> shuffled = new ArrayList<Image>(mImages);
-                Collections.shuffle(shuffled);
-                mImageAdapter.updateData(shuffled);
-                updateAdapter(shuffled);
-            }
-        }
+//        if (id == R.id.action_shuffle) {
+//            if (mImages != null) {
+//                //we don't want to shuffle the original list
+//                ArrayList<Image> shuffled = new ArrayList<Image>(mImages);
+//                Collections.shuffle(shuffled);
+//                mImageAdapter.updateData(shuffled);
+//                updateAdapter(shuffled);
+//            }
+//        }
         return super.onOptionsItemSelected(item);
     }
 

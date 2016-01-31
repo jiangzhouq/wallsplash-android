@@ -93,4 +93,7 @@ dependencies {
     compile 'com.mikepenz:fontawesome-typeface:4.4.0.1@aar'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile files('libs/panframe-1.9.jar')
+    compile('com.mikepenz:materialize:0.7.1@aar') {
+        transitive = true
+    }
 }

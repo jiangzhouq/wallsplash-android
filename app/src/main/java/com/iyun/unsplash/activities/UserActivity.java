@@ -39,7 +39,7 @@ public class UserActivity extends AppCompatActivity {
         }
     }
 
-    public Drawer result;
+//    public Drawer result;
 
     private OnFilterChangedListener onFilterChangedListener;
 
@@ -54,21 +54,21 @@ public class UserActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
-        result = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withHeader(R.layout.header)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.category_all).withIdentifier(Category.ALL.id).withIcon(GoogleMaterial.Icon.gmd_landscape),
-                        new PrimaryDrawerItem().withName(R.string.category_featured).withIdentifier(Category.FEATURED.id).withIcon(GoogleMaterial.Icon.gmd_grade),
-                        new SectionDrawerItem().withName(R.string.category_section_categories),
-                        new PrimaryDrawerItem().withName(R.string.category_buildings).withIdentifier(Category.BUILDINGS.id).withIcon(GoogleMaterial.Icon.gmd_location_city),
-                        new PrimaryDrawerItem().withName(R.string.category_food).withIdentifier(Category.FOOD.id).withIcon(GoogleMaterial.Icon.gmd_local_bar),
-                        new PrimaryDrawerItem().withName(R.string.category_nature).withIdentifier(Category.NATURE.id).withIcon(GoogleMaterial.Icon.gmd_local_florist),
-                        new PrimaryDrawerItem().withName(R.string.category_objects).withIdentifier(Category.OBJECTS.id).withIcon(GoogleMaterial.Icon.gmd_style),
-                        new PrimaryDrawerItem().withName(R.string.category_people).withIdentifier(Category.PEOPLE.id).withIcon(GoogleMaterial.Icon.gmd_person),
-                        new PrimaryDrawerItem().withName(R.string.category_technology).withIdentifier(Category.TECHNOLOGY.id).withIcon(GoogleMaterial.Icon.gmd_local_see)
-                )
+//        result = new DrawerBuilder()
+//                .withActivity(this)
+//                .withToolbar(toolbar)
+//                .withHeader(R.layout.header)
+//                .addDrawerItems(
+//                        new PrimaryDrawerItem().withName(R.string.category_all).withIdentifier(Category.ALL.id).withIcon(GoogleMaterial.Icon.gmd_landscape),
+//                        new PrimaryDrawerItem().withName(R.string.category_featured).withIdentifier(Category.FEATURED.id).withIcon(GoogleMaterial.Icon.gmd_grade),
+//                        new SectionDrawerItem().withName(R.string.category_section_categories),
+//                        new PrimaryDrawerItem().withName(R.string.category_buildings).withIdentifier(Category.BUILDINGS.id).withIcon(GoogleMaterial.Icon.gmd_location_city),
+//                        new PrimaryDrawerItem().withName(R.string.category_food).withIdentifier(Category.FOOD.id).withIcon(GoogleMaterial.Icon.gmd_local_bar),
+//                        new PrimaryDrawerItem().withName(R.string.category_nature).withIdentifier(Category.NATURE.id).withIcon(GoogleMaterial.Icon.gmd_local_florist),
+//                        new PrimaryDrawerItem().withName(R.string.category_objects).withIdentifier(Category.OBJECTS.id).withIcon(GoogleMaterial.Icon.gmd_style),
+//                        new PrimaryDrawerItem().withName(R.string.category_people).withIdentifier(Category.PEOPLE.id).withIcon(GoogleMaterial.Icon.gmd_person),
+//                        new PrimaryDrawerItem().withName(R.string.category_technology).withIdentifier(Category.TECHNOLOGY.id).withIcon(GoogleMaterial.Icon.gmd_local_see)
+//                )
 //                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 //
 //                    @Override
@@ -85,52 +85,52 @@ public class UserActivity extends AppCompatActivity {
 //                        return false;
 //                    }
 //                })
-                .build();
+//                .build();
 
         //disable scrollbar :D it's ugly
-        result.getRecyclerView().setVerticalScrollBarEnabled(false);
+//        result.getRecyclerView().setVerticalScrollBarEnabled(false);
     }
 
     /**
      * @param images
      */
     public void setCategoryCount(ImageList images) {
-        if (result.getDrawerItems() != null && result.getDrawerItems().size() == 9 && images != null && images.getData() != null) {
-            result.updateBadge(Category.ALL.id, new StringHolder(images.getData().size() + ""));
-            result.updateBadge(Category.FEATURED.id, new StringHolder(UnsplashApi.countFeatured(images.getData()) + ""));
-
-            result.updateBadge(Category.BUILDINGS.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.BUILDINGS.id) + ""));
-            result.updateBadge(Category.FOOD.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.FOOD.id) + ""));
-            result.updateBadge(Category.NATURE.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.NATURE.id) + ""));
-            result.updateBadge(Category.OBJECTS.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.OBJECTS.id) + ""));
-            result.updateBadge(Category.PEOPLE.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.PEOPLE.id) + ""));
-            result.updateBadge(Category.TECHNOLOGY.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.TECHNOLOGY.id) + ""));
-        }
+//        if (result.getDrawerItems() != null && result.getDrawerItems().size() == 9 && images != null && images.getData() != null) {
+//            result.updateBadge(Category.ALL.id, new StringHolder(images.getData().size() + ""));
+//            result.updateBadge(Category.FEATURED.id, new StringHolder(UnsplashApi.countFeatured(images.getData()) + ""));
+//
+//            result.updateBadge(Category.BUILDINGS.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.BUILDINGS.id) + ""));
+//            result.updateBadge(Category.FOOD.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.FOOD.id) + ""));
+//            result.updateBadge(Category.NATURE.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.NATURE.id) + ""));
+//            result.updateBadge(Category.OBJECTS.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.OBJECTS.id) + ""));
+//            result.updateBadge(Category.PEOPLE.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.PEOPLE.id) + ""));
+//            result.updateBadge(Category.TECHNOLOGY.id, new StringHolder(UnsplashApi.countCategory(images.getData(), Category.TECHNOLOGY.id) + ""));
+//        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.action_open_source).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_settings).color(Color.WHITE).actionBar());
-        menu.findItem(R.id.action_shuffle).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_shuffle).paddingDp(1).color(Color.WHITE).actionBar());
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        menu.findItem(R.id.action_open_source).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_settings).color(Color.WHITE).actionBar());
+//        menu.findItem(R.id.action_shuffle).setIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_shuffle).paddingDp(1).color(Color.WHITE).actionBar());
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_open_source) {
-            new LibsBuilder()
-                    .withFields(R.string.class.getFields())
-                    .withActivityTitle(getString(R.string.action_open_source))
-                    .withActivityTheme(R.style.MaterialDrawerTheme)
-                    .withLibraries("rxJava", "rxAndroid")
-                    .start(this);
-
-            return true;
-        }
+//        int id = item.getItemId();
+//        if (id == R.id.action_open_source) {
+//            new LibsBuilder()
+//                    .withFields(R.string.class.getFields())
+//                    .withActivityTitle(getString(R.string.action_open_source))
+//                    .withActivityTheme(R.style.MaterialDrawerTheme)
+//                    .withLibraries("rxJava", "rxAndroid")
+//                    .start(this);
+//
+//            return true;
+//        }
         return false; //super.onOptionsItemSelected(item);
     }
 
