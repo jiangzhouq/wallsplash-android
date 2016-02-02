@@ -7,18 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.iyun.unsplash.models.ImageList;
-import com.iyun.unsplash.network.UnsplashApi;
-import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.StringHolder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.iyun.unsplash.R;
+import com.iyun.unsplash.models.ImageList;
 
 
 public class SingleUserActivity extends AppCompatActivity {
@@ -56,7 +48,14 @@ public class SingleUserActivity extends AppCompatActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("qiqi", "back pressed");
+                onBackPressed();
+            }
+        });
 //        result = new DrawerBuilder()
 //                .withActivity(this)
 //                .withToolbar(toolbar)

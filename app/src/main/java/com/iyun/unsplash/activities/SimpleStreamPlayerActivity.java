@@ -11,17 +11,18 @@
 package com.iyun.unsplash.activities;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -39,7 +40,7 @@ import com.panframe.android.lib.PFView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAssetObserver, OnSeekBarChangeListener {
+public class SimpleStreamPlayerActivity extends AppCompatActivity implements PFAssetObserver, OnSeekBarChangeListener {
 
 	PFView				_pfview;
 	PFAsset 			_pfasset;
@@ -86,9 +87,20 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 	};
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_main_panframe_pic);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+		toolbar.setTitleTextColor(Color.WHITE);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.d("qiqi", "back pressed");
+				onBackPressed();
+			}
+		});
 
         _frameContainer = (ViewGroup) findViewById(R.id.framecontainer);
         _frameContainer.setBackgroundColor(0xFF000000);

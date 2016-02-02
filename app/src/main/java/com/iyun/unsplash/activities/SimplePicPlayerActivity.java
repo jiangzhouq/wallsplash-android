@@ -14,9 +14,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -24,7 +22,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -73,8 +70,16 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 		Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
 		toolbar.setTitleTextColor(Color.WHITE);
 		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Log.d("qiqi", "back pressed");
+				onBackPressed();
+			}
+		});
 
-        _frameContainer = (ViewGroup) findViewById(R.id.framecontainer);
+		_frameContainer = (ViewGroup) findViewById(R.id.framecontainer);
         _frameContainer.setBackgroundColor(0xFF000000);
 
 		_playButton = (Button)findViewById(R.id.playbutton);
@@ -97,7 +102,6 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 		showControls(false);
 
 	}
-
 	/**
 	 * Show/Hide the playback controls
 	 *
