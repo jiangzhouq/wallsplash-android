@@ -63,7 +63,7 @@ public class UnsplashApi {
         Observable<UserList> listUsers(@Query("order") int action,@Query("begin") int begin ,@Query("number") int number);
 
         @GET("/")
-        Observable<ImageList> listUserImages(@Query("action") int action ,@Query("uid") int uid);
+        Observable<ImageList> listUserImages(@Query("action") int action ,@Query("uid") int uid, @Query("begin") int begin ,@Query("number") int number);
 
         @GET("/")
         Observable<UserList> listUser(@Query("action") int action ,@Query("uid") int uid);
@@ -83,8 +83,8 @@ public class UnsplashApi {
         return mWebService.listUsers(order, begin, number);
     }
 
-    public Observable<ImageList> fetchUserImages(int uid) {
-        return mWebService.listUserImages(7, uid);
+    public Observable<ImageList> fetchUserImages(int uid, int begin, int number) {
+        return mWebService.listUserImages(7, uid, begin, number);
     }
 
     public Observable<UserList> fetchUser(int uid) {

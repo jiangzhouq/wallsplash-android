@@ -7,19 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.iyun.unsplash.network.UnsplashApi;
-import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.StringHolder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.iyun.unsplash.R;
 import com.iyun.unsplash.models.ImageList;
-import com.mikepenz.materialize.Materialize;
-import com.mikepenz.materialize.MaterializeBuilder;
 
 
 public class MainActivity extends AppCompatActivity {

@@ -119,7 +119,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 		String[] splitStrings = getIntent().getStringExtra("url").split("/");
 		uuurl_www = "http://view.iyun720.com/";
 		uuurl_name = splitStrings[splitStrings.length - 1].replace("short_", "");
-		loadVideo(uuurl_www + "1280_" + uuurl_name);
+		loadVideo(uuurl_www + uuurl_name);
 //		loadVideo("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
 
 		showControls(true);
@@ -165,7 +165,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
     {
 		Log.d("qiqi",filename);
 		_pfview = PFObjectFactory.view(this);
-		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8"), this);
+		_pfasset = PFObjectFactory.assetFromUri(this, Uri.parse(filename), this);
 
         _pfview.displayAsset(_pfasset);
         _pfview.setNavigationMode(_currentNavigationMode);
@@ -320,7 +320,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 				_pfview.release();
 			}
 			_frameContainer.removeViewAt(0);
-			loadVideo(uuurl_www + "1920_" + uuurl_name);
+			loadVideo(uuurl_www + uuurl_name);
 			_pfasset.setPLaybackTime(dur);
 		}
 	};
@@ -339,7 +339,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 				_pfview.release();
 			}
 			_frameContainer.removeViewAt(0);
-			loadVideo(uuurl_www + "1280_" + uuurl_name);
+			loadVideo(uuurl_www +  uuurl_name);
 			_pfasset.setPLaybackTime(dur);
 		}
 	};
@@ -358,7 +358,7 @@ public class SimpleStreamPlayerActivity extends FragmentActivity implements PFAs
 				_pfview.release();
 			}
 			_frameContainer.removeViewAt(0);
-			loadVideo(uuurl_www + "854_" + uuurl_name);
+			loadVideo(uuurl_www + uuurl_name);
 			_pfasset.setPLaybackTime(dur);
 		}
 	};

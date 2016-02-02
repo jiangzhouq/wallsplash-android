@@ -21,15 +21,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.iyun.unsplash.activities.DetailActivity;
-import com.iyun.unsplash.models.Image;
-import com.iyun.unsplash.models.User;
-import com.iyun.unsplash.models.UserList;
 import com.iyun.unsplash.OnItemClickListener;
 import com.iyun.unsplash.R;
+import com.iyun.unsplash.activities.DetailActivity;
 import com.iyun.unsplash.activities.MainActivity;
 import com.iyun.unsplash.activities.UserActivity;
+import com.iyun.unsplash.models.Image;
 import com.iyun.unsplash.models.ImageList;
+import com.iyun.unsplash.models.User;
+import com.iyun.unsplash.models.UserList;
 import com.iyun.unsplash.network.UnsplashApi;
 import com.iyun.unsplash.views.adapters.ImageAdapter;
 import com.sch.rfview.AnimRFRecyclerView;
@@ -37,7 +37,6 @@ import com.sch.rfview.manager.AnimRFGridLayoutManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit.RetrofitError;
@@ -143,6 +142,7 @@ public class ImagesFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Log.d("qiqi", "onRefresh");
+                showAll();
                 handler.sendEmptyMessage(0);
             }
 

@@ -26,6 +26,7 @@ import com.iyun.unsplash.R;
 import com.iyun.unsplash.activities.SingleUserActivity;
 import com.iyun.unsplash.models.ImageList;
 import com.sch.rfview.AnimRFRecyclerView;
+import com.sch.rfview.manager.AnimRFGridLayoutManager;
 
 import java.util.ArrayList;
 
@@ -43,23 +44,32 @@ public class UsersFragment extends Fragment {
     private UnsplashApi mApi = new UnsplashApi();
 
     private UserAdapter mUserAdapter;
-    private ArrayList<User> mUsers;
+    private ArrayList<User> mUsers = new ArrayList<User>();
     private ArrayList<User> mCurrentUsers;
     private AnimRFRecyclerView mImageRecycler;
     private ProgressBar mImagesProgress;
     private ErrorView mImagesErrorView;
 
-    Handler handler = new Handler(){
+    private int mUserCountPerGet = 5;
+
+    private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what){
                 case 0:
-                    Log.d("qiqi","update ");
-                    updateAdapter(mUsers);
+                    // 刷新完成后调用，必须在UI线程中
+                    mImageRecycler.refreshComplate();
+                    // 或者 刷新完成后调用，必须在UI线程中
+                    mImageRecycler.setRefresh(false);
+                    break;
+                case 1:
+                    // 加载更多完成后调用，必须在UI线程中
+                    mImageRecycler.loadMoreComplate();
                     break;
             }
         }
     };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -96,7 +106,7 @@ public class UsersFragment extends Fragment {
         mImagesErrorView = (ErrorView) rootView.findViewById(R.id.fragment_images_error_view);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        mImageRecycler.setLayoutManager(gridLayoutManager);
+        mImageRecycler.setLayoutManager(new AnimRFGridLayoutManager(getActivity(), 1));
         mImageRecycler.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -107,6 +117,26 @@ public class UsersFragment extends Fragment {
         mUserAdapter = new UserAdapter();
         mUserAdapter.setOnItemClickListener(recyclerRowClickListener);
         mImageRecycler.setAdapter(mUserAdapter);
+//        mImageRecycler.setLoadDataListener(new AnimRFRecyclerView.LoadDataListener(){
+//            @Override
+//            public void onRefresh() {
+//                Log.d("qiqi", "onRefresh");
+//                showAll();
+//                handler.sendEmptyMessage(0);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                Log.d("qiqi", "onLoadMore");
+////                mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 0).cache().subscribeOn(Schedulers.newThread())
+////                        .observeOn(AndroidSchedulers.mainThread())
+////                        .subscribe(observer);
+//                mApi.fetchUsers(1, mUsers.size(), mUserCountPerGet).cache().subscribeOn(Schedulers.newThread())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(observer);
+//                handler.sendEmptyMessage(1);
+//            }
+//        });
 
         showAll();
 
@@ -122,14 +152,16 @@ public class UsersFragment extends Fragment {
 //        if (mUsers != null) {
 //            updateAdapter(mUsers);
 //        } else {
-            mImagesProgress.setVisibility(View.VISIBLE);
-            mImageRecycler.setVisibility(View.GONE);
-            mImagesErrorView.setVisibility(View.GONE);
+        if (mUsers.size() > 0)
+            mUsers.clear();
+        mImagesProgress.setVisibility(View.VISIBLE);
+        mImageRecycler.setVisibility(View.GONE);
+        mImagesErrorView.setVisibility(View.GONE);
 
-            // Load images from API
-            mApi.fetchUsers(1, 0, 10).cache().subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(observer);
+        // Load images from API
+        mApi.fetchUsers(1, mUsers.size(), mUserCountPerGet).cache().subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
 //        }
     }
 
@@ -144,7 +176,7 @@ public class UsersFragment extends Fragment {
     private void startToGetPics(){
         for (int i = 0; i < mUsers.size(); i++){
             User user = mUsers.get(i);
-            mApi.fetchUserImages(user.getUid()).cache().subscribeOn(Schedulers.newThread())
+            mApi.fetchUserImages(user.getUid(), 0, 2).cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new PicObserver(i));
         }
@@ -186,15 +218,7 @@ public class UsersFragment extends Fragment {
     private Observer<UserList> observer = new Observer<UserList>() {
         @Override
         public void onNext(final UserList users) {
-            mUsers = users.getData();
-            Log.d("qiqi", "start to get pics");
-            ArrayList<User> nUsers = new ArrayList<User>();
-            for (User user : mUsers){
-                if(user.getWorks() > 0){
-                    nUsers.add(user);
-                }
-            }
-            mUsers = nUsers;
+            mUsers.addAll(users.getData());
             startToGetPics();
             updateAdapter(mUsers);
 //            handler.sendEmptyMessageDelayed(0, 5000);
@@ -235,7 +259,7 @@ public class UsersFragment extends Fragment {
             mImagesErrorView.setOnRetryListener(new RetryListener() {
                 @Override
                 public void onRetry() {
-                    showAll();
+//                    showAll();
                 }
             });
         }
@@ -309,6 +333,7 @@ public class UsersFragment extends Fragment {
     private void updateAdapter(ArrayList<User> users) {
         mCurrentUsers = users;
         mUserAdapter.updateData(mCurrentUsers);
+        mImageRecycler.getAdapter().notifyDataSetChanged();
 //        mImageRecycler.scrollToPosition(0);
         /*
         mImageAdapter = new ImageAdapter(images);

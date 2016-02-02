@@ -20,15 +20,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.iyun.unsplash.models.Image;
-import com.iyun.unsplash.models.UserList;
 import com.iyun.unsplash.OnItemClickListener;
 import com.iyun.unsplash.R;
 import com.iyun.unsplash.activities.DetailActivity;
 import com.iyun.unsplash.activities.MainActivity;
 import com.iyun.unsplash.activities.SingleUserActivity;
+import com.iyun.unsplash.models.Image;
 import com.iyun.unsplash.models.ImageList;
 import com.iyun.unsplash.models.User;
+import com.iyun.unsplash.models.UserList;
 import com.iyun.unsplash.network.UnsplashApi;
 import com.iyun.unsplash.views.adapters.ImageAdapter;
 import com.sch.rfview.AnimRFRecyclerView;
@@ -36,7 +36,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import retrofit.RetrofitError;
 import rx.Observer;
@@ -132,7 +131,7 @@ public class SingleUserFragment extends Fragment {
             mImagesErrorView.setVisibility(View.GONE);
             Log.d("qiqi", "singleUser curUid:" + curUid);
             // Load images from API
-            mApi.fetchUserImages(curUid).cache().subscribeOn(Schedulers.newThread())
+            mApi.fetchUserImages(curUid, 0, 100).cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
             mApi.fetchUser(curUid).cache().subscribeOn(Schedulers.newThread())
