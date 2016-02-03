@@ -332,6 +332,7 @@ public class ImagesFragment extends Fragment {
             detailIntent.putExtra("position", position);
             detailIntent.putExtra("mid", mCurrentImages.get(position-2).getMid());
             detailIntent.putExtra("selected_image", selectedImage);
+            detailIntent.putExtra("list", mImages);
 
             if (selectedImage.getSwatch() != null) {
                 detailIntent.putExtra("swatch_title_text_color", selectedImage.getSwatch().getTitleTextColor());

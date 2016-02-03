@@ -12,7 +12,7 @@
 
     </AbsoluteLayout>
 
-    <com.iyun.unsplash.activities.NointerRelativeLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/controler_container">
@@ -30,13 +30,19 @@
             android:layout_height="200dp"
             android:layout_centerInParent="true"
             />
-        <android.support.v7.widget.RecyclerView
+        <LinearLayout
             android:id="@+id/pic_list"
             android:layout_above="@+id/video_controler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:background="#AA000000"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -77,40 +83,8 @@
             android:id="@+id/video_controler"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_above="@+id/controler"
+            android:layout_above="@+id/alignBottom"
             android:gravity="center_vertical">
-
-            <!--<Button-->
-                <!--android:id="@+id/stopbutton"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_alignTop="@+id/playbutton"-->
-                <!--android:background="#AA000000"-->
-                <!--android:text="stop"-->
-                <!--android:textColor="#fff"-->
-                <!--android:textSize="14sp"-->
-                <!--android:width="80dp"-->
-                <!--android:visibility="gone"/>-->
-
-            <!--<Button-->
-                <!--android:id="@+id/touchbutton"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_alignTop="@+id/scrubber"-->
-                <!--android:layout_marginLeft="1dp"-->
-                <!--android:background="#AA000000"-->
-                <!--android:text="motion"-->
-                <!--android:textColor="#fff"-->
-                <!--android:textSize="14sp"-->
-                <!--android:width="80dp"-->
-                <!--android:visibility="gone" />-->
-
-
-
             <Button
                 android:id="@+id/resolution"
                 android:layout_width="80dp"
@@ -137,46 +111,78 @@
                 android:layout_height="match_parent"
                 android:background="#AA000000"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_margin="1dp"/>
+                android:paddingRight="5dp"/>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/controler"
+            android:id="@+id/alignBottom"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             >
-            <Button
-                android:id="@+id/music"
-                android:background="#AA000000"
-                android:layout_margin="1dp"
+            <LinearLayout
+                android:id="@+id/controler"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:text="@string/music_off"/>
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/music"
+                    android:background="#AA000000"
+                    android:layout_margin="1dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@string/music_off"/>
 
-            <Button
-                android:id="@+id/more"
-                android:background="#AA000000"
-                android:layout_margin="1dp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:text="@string/more"/>
-
-            <Button
+                <Button
+                    android:id="@+id/more"
+                    android:background="#AA000000"
+                    android:layout_margin="1dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@string/more"/>
+            </LinearLayout>
+            <ImageButton
                 android:id="@+id/info"
                 android:background="#AA000000"
-                android:layout_margin="1dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/arrow_left"
+                android:text="@string/info"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp">
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:text="@string/info"/>
-
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/iyun720_url"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/right_iyun"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/iyun720_url"/>
+            </LinearLayout>
         </LinearLayout>
 
-    </com.iyun.unsplash.activities.NointerRelativeLayout>
+    </RelativeLayout>
     <android.support.v7.widget.Toolbar
         android:id="@+id/activity_main_toolbar"
         android:layout_width="match_parent"

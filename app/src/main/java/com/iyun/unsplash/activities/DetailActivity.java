@@ -49,6 +49,7 @@ import com.nispok.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -82,6 +83,7 @@ public class DetailActivity extends AppCompatActivity {
     private int from = 1;
 
     private int mid = 0;
+    private ArrayList<Image> picList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -104,7 +106,7 @@ public class DetailActivity extends AppCompatActivity {
         mSelectedImage = (Image) getIntent().getSerializableExtra("selected_image");
         from = (int)getIntent().getIntExtra("from", 1);
         mid = getIntent().getIntExtra("mid", 0);
-
+        picList = (ArrayList<Image>) getIntent().getSerializableExtra("list");
         mDrawablePhoto = new IconicsDrawable(this, FontAwesome.Icon.faw_photo).color(Color.WHITE).sizeDp(24);
         mDrawableClose = new IconicsDrawable(this, FontAwesome.Icon.faw_close).color(Color.WHITE).sizeDp(24);
         mDrawableSuccess = new IconicsDrawable(this, FontAwesome.Icon.faw_check).color(Color.WHITE).sizeDp(24);
@@ -377,9 +379,11 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(mSelectedImage.getStandard_resolution().endsWith(".mp4")){
-                Intent intent = new Intent(DetailActivity.this, SimpleStreamPlayerActivity.class);
+                Intent intent = new Intent(DetailActivity.this, SimplePicPlayerActivity.class);
                 intent.putExtra("url", mSelectedImage.getStandard_resolution());
+                intent.putExtra("list", picList);
                 startActivity(intent);
+                DetailActivity.this.finish();
             }else{
                 if (future == null) {
                     //prepare the call
@@ -572,6 +576,7 @@ public class DetailActivity extends AppCompatActivity {
 //                                Intent intent = new Intent("MyCardboardActivity");
                                 Intent intent = new Intent(DetailActivity.this, SimplePicPlayerActivity.class);
                                 intent.putExtra("url", file.getAbsolutePath());
+                                intent.putExtra("list", picList);
                                 Log.d("qiqi", "file.getPath():" + file.getAbsolutePath());
                                 startActivity(intent);
                                 DetailActivity.this.finish();

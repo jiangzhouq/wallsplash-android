@@ -234,7 +234,7 @@ public class SingleUserFragment extends Fragment {
             detailIntent.putExtra("position", position);
             detailIntent.putExtra("selected_image", selectedImage);
             detailIntent.putExtra("from", 2 );//1 for ImageFragment 2 for singuserfragment
-
+            detailIntent.putExtra("list", mImages);
             if (selectedImage.getSwatch() != null) {
                 detailIntent.putExtra("swatch_title_text_color", selectedImage.getSwatch().getTitleTextColor());
                 detailIntent.putExtra("swatch_rgb", selectedImage.getSwatch().getRgb());
