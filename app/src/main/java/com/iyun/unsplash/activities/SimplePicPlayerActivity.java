@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -24,8 +25,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import com.iyun.unsplash.R;
 import com.panframe.android.lib.PFAsset;
@@ -46,14 +50,41 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 
 	boolean 			_updateThumb = true;;
     Timer 				_scrubberMonitorTimer;
-
+	//All
     ViewGroup 			_frameContainer;
-	Button				_stopButton;
+	NointerRelativeLayout _controlerContainer;
+	//video progress bar
+	private ProgressBar _loadingProgress;
+	RecyclerView _imageList;
+	TextView _infoText;
+	//
+	LinearLayout _resolutionChooser;
+	Button _1080p;
+	Button _720p;
+	Button _640p;
+	//
+	LinearLayout _videoControler;
 	Button				_playButton;
 	Button				_resolution;
-	Button				_touchButton;
 	SeekBar				_scrubber;
+	//
+	LinearLayout _controler;
+	Button _music;
+	Button _more;
+	Button _info;
+
 	Bitmap bitmapTmp;
+	//avialible for controler , videocontroler , resolution , imagelist , info
+	private boolean[] CUR_STATE ;
+	private boolean[] STATE_PIC = new boolean[]{true,false,false,false,false};
+	private boolean[] STATE_PIC_IMAGELIST = new boolean[]{true,false,false,true,false};
+	private boolean[] STATE_PIC_INFO = new boolean[]{true,false,false,false,true};
+	private boolean[] STATE_VID = new boolean[]{true,true,false,false,false};
+	private boolean[] STATE_VID_RESO = new boolean[]{true,true,true,false,false};
+	private boolean[] STATE_VID_IMAGELIST = new boolean[]{true,true,false,true,false};
+	private boolean[] STATE_VID_INFO = new boolean[]{true,true,false,false,true};
+	private boolean[] STATE_NONE = new boolean[]{false,false,false,false,false};
+
 	//0 for not ready, 1 for ready, 2 for , 3 for playing, 4 for stoped
 	private int state = 0;
 	/**
@@ -71,7 +102,7 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 		toolbar.setTitleTextColor(Color.WHITE);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Log.d("qiqi", "back pressed");
@@ -81,49 +112,58 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 
 		_frameContainer = (ViewGroup) findViewById(R.id.framecontainer);
         _frameContainer.setBackgroundColor(0xFF000000);
+		_controlerContainer = (NointerRelativeLayout) findViewById(R.id.controler_container);
+		_frameContainer.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (CUR_STATE.equals(STATE_NONE)) {
+					showControls(STATE_PIC);
+				} else {
+					showControls(STATE_NONE);
+				}
+			}
+		});
+		_loadingProgress = (ProgressBar) findViewById(R.id.video_progress);
+		_infoText = (TextView) findViewById(R.id.info_text);
+		_imageList = (RecyclerView) findViewById(R.id.pic_list);
 
+		_resolutionChooser = (LinearLayout) findViewById(R.id.resolution_layout);
+		_1080p = (Button) findViewById(R.id.resolution_1080);
+		_720p = (Button) findViewById(R.id.resolution_720);
+		_640p = (Button) findViewById(R.id.resolution_640);
+
+		_videoControler = (LinearLayout) findViewById(R.id.video_controler);
 		_playButton = (Button)findViewById(R.id.playbutton);
-		_stopButton = (Button)findViewById(R.id.stopbutton);
-		_touchButton = (Button)findViewById(R.id.touchbutton);
 		_resolution = (Button)findViewById(R.id.resolution);
 		_scrubber = (SeekBar)findViewById(R.id.scrubber);
 
 		_playButton.setOnClickListener(playListener);
-		_stopButton.setOnClickListener(stopListener);
-		_touchButton.setOnClickListener(touchListener);
 		_scrubber.setOnSeekBarChangeListener(this);
 
 		_scrubber.setEnabled(false);
 
+		_controler = (LinearLayout) findViewById(R.id.controler);
+		_music = (Button) findViewById(R.id.music);
+		_more = (Button) findViewById(R.id.more);
+		_info = (Button) findViewById(R.id.info);
 //		loadVideo("http://view.iyun720.com/iyun720_1450764126000_92688495.mp4");
 		loadVideo(getIntent().getStringExtra("url"));
-
-
-		showControls(false);
+		showControls(STATE_PIC);
 
 	}
 	/**
 	 * Show/Hide the playback controls
 	 *
-	 * @param  bShow  Show or hide the controls. Pass either true or false.
+	 * @param  state  Show or hide the controls. Pass either true or false.
 	 */
-    public void showControls(boolean bShow)
+    public void showControls(boolean[] state)
     {
-    	int visibility = View.GONE;
-
-    	if (bShow)
-    		visibility = View.VISIBLE;
-
-		_playButton.setVisibility(visibility);
-		_stopButton.setVisibility(View.GONE);
-		_touchButton.setVisibility(View.GONE);
-		_scrubber.setVisibility(visibility);
-		_resolution.setVisibility(visibility);
-		if (_pfview != null)
-		{
-			if (!_pfview.supportsNavigationMode(PFNavigationMode.MOTION))
-				_touchButton.setVisibility(View.GONE);
-		}
+		CUR_STATE = state;
+		_controler.setVisibility(state[0]?View.VISIBLE:View.GONE);
+		_videoControler.setVisibility(state[1]?View.VISIBLE:View.GONE);
+		_resolutionChooser.setVisibility(state[2]?View.VISIBLE:View.GONE);
+		_imageList.setVisibility(state[3]?View.VISIBLE:View.GONE);
+		_infoText.setVisibility(state[4]?View.VISIBLE:View.GONE);
     }
 
 
@@ -363,7 +403,6 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 			if(_pfview != null){
 				_pfview.setMode(0,1);
 				_currentNavigationMode = PFNavigationMode.TOUCH;
-				_touchButton.setText("touch");
 				_pfview.setNavigationMode(_currentNavigationMode);
 				_pfview.handleOrientationChange();
 			}
@@ -375,7 +414,6 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 			if(_pfview != null){
 				_pfview.setMode(2,1);
 				_currentNavigationMode = PFNavigationMode.MOTION;
-				_touchButton.setText("motion");
 				_pfview.setNavigationMode(_currentNavigationMode);
 				_pfview.handleOrientationChange();
 			}
@@ -394,4 +432,5 @@ public class SimplePicPlayerActivity extends AppCompatActivity implements PFAsse
 		if(bitmapTmp != null && ! bitmapTmp.isRecycled())
 			bitmapTmp.recycle();
 	}
+
 }

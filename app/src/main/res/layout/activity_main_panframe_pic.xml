@@ -12,9 +12,10 @@
 
     </AbsoluteLayout>
 
-    <RelativeLayout
+    <com.iyun.unsplash.activities.NointerRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/controler_container">
         <ProgressBar
             android:id="@+id/video_progress"
             android:layout_width="wrap_content"
@@ -23,14 +24,19 @@
             android:layout_centerInParent="true"
             style="?android:progressBarStyleLarge"
             android:visibility="gone"/>
-        
-        <RecyclerView
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            />
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/pic_list"
             android:layout_above="@+id/video_controler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-        </RecyclerView>
+        </android.support.v7.widget.RecyclerView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -45,8 +51,7 @@
                 android:background="#AA000000"
                 android:text="1080p"
                 android:textColor="#fff"
-                android:textSize="14sp"
-                android:visibility="gone"/>
+                android:textSize="14sp"/>
             <Button
                 android:id="@+id/resolution_720"
                 android:layout_width="0dp"
@@ -56,8 +61,7 @@
                 android:background="#AA000000"
                 android:text="720p"
                 android:textColor="#fff"
-                android:textSize="14sp"
-                android:visibility="gone"/>
+                android:textSize="14sp"/>
             <Button
                 android:id="@+id/resolution_640"
                 android:layout_width="0dp"
@@ -67,13 +71,12 @@
                 android:background="#AA000000"
                 android:text="640p"
                 android:textColor="#fff"
-                android:textSize="14sp"
-                android:visibility="gone"/>
+                android:textSize="14sp"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/video_controler"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="40dp"
             android:layout_above="@+id/controler"
             android:gravity="center_vertical">
 
@@ -110,29 +113,32 @@
 
             <Button
                 android:id="@+id/resolution"
-                android:layout_width="40dp"
-                android:layout_height="20dp"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
                 android:background="#AA000000"
                 android:text="RESOLU"
                 android:textColor="#fff"
+                android:layout_margin="1dp"
                 android:textSize="14sp"/>
 
             <Button
                 android:id="@+id/playbutton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
                 android:background="#AA000000"
                 android:text="play"
                 android:textColor="#fff"
+                android:layout_margin="1dp"
                 android:textSize="14sp"/>
 
             <SeekBar
                 android:id="@+id/scrubber"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="#AA000000"
                 android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
+                android:paddingRight="5dp"
+                android:layout_margin="1dp"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/controler"
@@ -170,7 +176,7 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </com.iyun.unsplash.activities.NointerRelativeLayout>
     <android.support.v7.widget.Toolbar
         android:id="@+id/activity_main_toolbar"
         android:layout_width="match_parent"
