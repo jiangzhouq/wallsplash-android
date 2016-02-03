@@ -25,12 +25,17 @@
             android:visibility="gone"/>
         
         <RecyclerView
+            android:id="@+id/pic_list"
+            android:layout_above="@+id/video_controler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
         </RecyclerView>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:id="@+id/resolution_layout"
+            android:layout_above="@+id/video_controler">
             <Button
                 android:id="@+id/resolution_1080"
                 android:layout_width="0dp"
@@ -66,8 +71,10 @@
                 android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/video_controler"
             android:layout_width="match_parent"
             android:layout_height="20dp"
+            android:layout_above="@+id/controler"
             android:gravity="center_vertical">
 
             <!--<Button-->
@@ -128,6 +135,7 @@
                 android:paddingRight="5dp"/>
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/controler"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal"

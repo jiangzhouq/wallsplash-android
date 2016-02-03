@@ -151,7 +151,7 @@ public class ImagesFragment extends Fragment {
                 Log.d("qiqi", "onLoadMore");
                 mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 0).cache().subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
+                        .subscribe(picObserver);
                 handler.sendEmptyMessage(1);
             }
         });
@@ -176,9 +176,9 @@ public class ImagesFragment extends Fragment {
         mImagesErrorView.setVisibility(View.GONE);
 
         // Load images from API
-        mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 0).cache().subscribeOn(Schedulers.newThread())
+        mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 2).cache().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(videoObserver);
         mApi.fetchUsers(1, 0, 10).cache().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topUserobserver);
@@ -218,7 +218,58 @@ public class ImagesFragment extends Fragment {
         updateAdapter(mApi.filterCategory(mImages, category));
     }
 
-    private Observer<ImageList> observer = new Observer<ImageList>() {
+    private Observer<ImageList> videoObserver = new Observer<ImageList>() {
+        @Override
+        public void onNext(final ImageList images) {
+            mImages.addAll(images.getData());
+
+            if (ImagesFragment.this.getActivity() instanceof MainActivity) {
+                ((MainActivity) ImagesFragment.this.getActivity()).setCategoryCount(images);
+            }
+        }
+
+        @Override
+        public void onCompleted() {
+            // Dismiss loading dialog
+//            mImagesProgress.setVisibility(View.GONE);
+//            mImageRecycler.setVisibility(View.VISIBLE);
+//            mImagesErrorView.setVisibility(View.GONE);
+            // Load images from API
+            mApi.fetchImages(1, mImages.size(), mPicCountPerGet, 1).cache().subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(picObserver);
+        }
+
+        @Override
+        public void onError(final Throwable error) {
+            if (error instanceof RetrofitError) {
+                RetrofitError e = (RetrofitError) error;
+                if (e.getKind() == RetrofitError.Kind.NETWORK) {
+                    mImagesErrorView.setErrorTitle(R.string.error_network);
+                    mImagesErrorView.setErrorSubtitle(R.string.error_network_subtitle);
+                } else if (e.getKind() == RetrofitError.Kind.HTTP) {
+                    mImagesErrorView.setErrorTitle(R.string.error_server);
+                    mImagesErrorView.setErrorSubtitle(R.string.error_server_subtitle);
+                } else {
+                    mImagesErrorView.setErrorTitle(R.string.error_uncommon);
+                    mImagesErrorView.setErrorSubtitle(R.string.error_uncommon_subtitle);
+                }
+            }
+
+            mImagesProgress.setVisibility(View.GONE);
+            mImageRecycler.setVisibility(View.GONE);
+            mImagesErrorView.setVisibility(View.VISIBLE);
+
+            mImagesErrorView.setOnRetryListener(new RetryListener() {
+                @Override
+                public void onRetry() {
+                    showAll();
+                }
+            });
+        }
+    };
+
+    private Observer<ImageList> picObserver = new Observer<ImageList>() {
         @Override
         public void onNext(final ImageList images) {
             mImages.addAll(images.getData());

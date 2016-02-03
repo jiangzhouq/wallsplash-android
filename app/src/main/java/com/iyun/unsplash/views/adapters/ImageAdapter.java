@@ -10,21 +10,21 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.iyun.unsplash.OnItemClickListener;
-import com.iyun.unsplash.models.Image;
 import com.iyun.unsplash.R;
+import com.iyun.unsplash.models.Image;
 import com.iyun.unsplash.other.PaletteTransformation;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
 
@@ -76,11 +76,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
     public void onBindViewHolder(final ImagesViewHolder imagesViewHolder, final int position) {
 
         final Image currentImage = mImages.get(position);
-        imagesViewHolder.imageAuthor.setText(currentImage.getTitle());
+        imagesViewHolder.imageSummary.setText(currentImage.getTitle());
 
-        imagesViewHolder.imageDate.setText(DateFormat.getDateInstance().format(new Date(currentImage.getCreate_time())));
+        imagesViewHolder.imageAuthor.setText(currentImage.getUsername());
         //imagesViewHolder.imageView.setDrawingCacheEnabled(true);
         imagesViewHolder.imageView.setImageBitmap(null);
+
 
         //reset colors so we prevent crazy flashes :D
 //        imagesViewHolder.imageAuthor.setTextColor(mDefaultTextColor);
@@ -91,6 +92,66 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         }else{
             imagesViewHolder.playView.setVisibility(View.GONE);
         }
+
+        //cancel any loading images on this view
+        Picasso.with(mContext).cancelRequest(imagesViewHolder.userPRofile);
+        //load the image
+        Picasso.with(mContext).load("http://www.iyun720.com/data/avatar/000/00/00/"+ currentImage.getUid() +"_avatar_middle.jpg" ).transform(PaletteTransformation.instance()).into(imagesViewHolder.userPRofile, new Callback.EmptyCallback() {
+            @Override
+            public void onSuccess() {
+                Bitmap bitmap = null;
+                if((BitmapDrawable) imagesViewHolder.userPRofile.getDrawable() != null){
+                    bitmap = ((BitmapDrawable) imagesViewHolder.userPRofile.getDrawable()).getBitmap(); // Ew!
+
+                }
+
+                if (bitmap != null && !bitmap.isRecycled()) {
+                    Palette palette = PaletteTransformation.getPalette(bitmap);
+
+                    if (palette != null) {
+                        Palette.Swatch s = palette.getVibrantSwatch();
+                        if (s == null) {
+                            s = palette.getDarkVibrantSwatch();
+                        }
+                        if (s == null) {
+                            s = palette.getLightVibrantSwatch();
+                        }
+                        if (s == null) {
+                            s = palette.getMutedSwatch();
+                        }
+
+                        if (s != null && position >= 0 && position < mImages.size()) {
+                            if (mImages.get(position) != null) {
+                                mImages.get(position).setSwatch(s);
+                            }
+
+//                            usersViewHolder.userAuthor.setTextColor(s.getTitleTextColor());
+//                            usersViewHolder.userDetail.setTextColor(s.getTitleTextColor());
+//                            Utils.animateViewColor(usersViewHolder.imageTextContainer, mDefaultBackgroundColor, s.getRgb());
+                        }
+                    }
+                }
+
+                // just delete the reference again.
+                bitmap = null;
+
+                if (Build.VERSION.SDK_INT >= 21) {
+                    imagesViewHolder.userPRofile.setTransitionName("cover" + position);
+                }
+//                usersViewHolder.imageTextContainer.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        onItemClickListener.onClick(v, position);
+//                    }
+//                });
+            }
+
+            @Override
+            public void onError() {
+                imagesViewHolder.userPRofile.setImageResource(R.drawable.ic_launcher);
+            }
+        });
+
         //cancel any loading images on this view
         Picasso.with(mContext).cancelRequest(imagesViewHolder.imageView);
         //load the image
@@ -159,26 +220,28 @@ public class ImageAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
 
 class ImagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    protected final FrameLayout imageTextContainer;
+    protected final LinearLayout imageTextContainer;
     protected final RelativeLayout imageContainer;
 
     protected final ImageView imageView;
     protected final ImageView playView;
     protected final TextView imageAuthor;
-    protected final TextView imageDate;
+    protected final TextView imageSummary;
     private final OnItemClickListener onItemClickListener;
+    protected final CircleImageView userPRofile;
 
     public ImagesViewHolder(View itemView, OnItemClickListener onItemClickListener) {
 
         super(itemView);
         this.onItemClickListener = onItemClickListener;
 
-        imageTextContainer = (FrameLayout) itemView.findViewById(R.id.item_image_text_container);
+        imageTextContainer = (LinearLayout) itemView.findViewById(R.id.item_image_text_container);
         imageView = (ImageView) itemView.findViewById(R.id.item_image_img);
         imageAuthor = (TextView) itemView.findViewById(R.id.item_image_author);
-        imageDate = (TextView) itemView.findViewById(R.id.item_image_date);
+        imageSummary = (TextView) itemView.findViewById(R.id.item_image_summary);
         playView = (ImageView) itemView.findViewById(R.id.play);
         imageContainer = (RelativeLayout) itemView.findViewById(R.id.image_container);
+        userPRofile = (CircleImageView) itemView.findViewById(R.id.user_profile);
         imageView.setOnClickListener(this);
 
     }
