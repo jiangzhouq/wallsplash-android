@@ -30,8 +30,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.iyun.unsplash.R;
+import com.iyun.unsplash.fragments.ImagesFragment;
 import com.iyun.unsplash.fragments.SingleUserFragment;
 import com.iyun.unsplash.models.Image;
+import com.iyun.unsplash.other.CustomAnimatorListener;
+import com.iyun.unsplash.other.CustomTransitionListener;
+import com.iyun.unsplash.other.PaletteTransformation;
+import com.iyun.unsplash.other.Utils;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
@@ -39,12 +45,6 @@ import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.future.ResponseFuture;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.iyun.unsplash.R;
-import com.iyun.unsplash.fragments.ImagesFragment;
-import com.iyun.unsplash.other.CustomAnimatorListener;
-import com.iyun.unsplash.other.CustomTransitionListener;
-import com.iyun.unsplash.other.PaletteTransformation;
-import com.iyun.unsplash.other.Utils;
 import com.nispok.snackbar.Snackbar;
 
 import java.io.File;
@@ -81,6 +81,7 @@ public class DetailActivity extends AppCompatActivity {
     private Animation mProgressFabAnimation;
     private int from = 1;
 
+    private int mid = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -102,6 +103,7 @@ public class DetailActivity extends AppCompatActivity {
         final int position = getIntent().getIntExtra("position", 0);
         mSelectedImage = (Image) getIntent().getSerializableExtra("selected_image");
         from = (int)getIntent().getIntExtra("from", 1);
+        mid = getIntent().getIntExtra("mid", 0);
 
         mDrawablePhoto = new IconicsDrawable(this, FontAwesome.Icon.faw_photo).color(Color.WHITE).sizeDp(24);
         mDrawableClose = new IconicsDrawable(this, FontAwesome.Icon.faw_close).color(Color.WHITE).sizeDp(24);
@@ -229,6 +231,21 @@ public class DetailActivity extends AppCompatActivity {
     private View.OnClickListener onFabShareButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Intent intent = new Intent();
+            //分享精确到微信的页面，朋友圈页面，或者选择好友分享页面
+//            ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+//            intent.setComponent(comp);
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, "http://www.iyun720.com/index.php?do=goods&id=" + mid);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(Intent.createChooser(intent, "请选择"));
+
+            //添加Uri图片地址
+//            ArrayList<Uri> imageUris = new ArrayList<Uri>();
+//            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+            startActivity(intent);
+
             Snackbar.with(getApplicationContext())
                     .text(R.string.not_opened)
                     .actionLabel(R.string.help_try_long_click_ok)

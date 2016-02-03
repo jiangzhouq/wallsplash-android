@@ -330,6 +330,7 @@ public class ImagesFragment extends Fragment {
 
             Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
             detailIntent.putExtra("position", position);
+            detailIntent.putExtra("mid", mCurrentImages.get(position-2).getMid());
             detailIntent.putExtra("selected_image", selectedImage);
 
             if (selectedImage.getSwatch() != null) {
